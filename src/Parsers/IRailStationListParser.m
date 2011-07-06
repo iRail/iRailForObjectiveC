@@ -32,48 +32,36 @@
 
 @implementation IRailStationListParser
 
-- (id)finish {
-    NSArray *arr = [[NSArray alloc] initWithArray:result];
-    [result release];
-    return arr;
-}
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser {
-    result = [[NSMutableArray alloc] init];
-}
-
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-    
-    if ([elementName isEqualToString:@"station"]) {
-        
-        currentStation = [[IRailStation alloc] init];
-        [currentStation setSid: [attributeDict objectForKey:@"id"]];
-        [currentStation setXCoord: [[attributeDict objectForKey:@"locationX"] doubleValue] ];
-        [currentStation setYCoord: [[attributeDict objectForKey:@"locationY"] doubleValue] ];
-        
+- (id)init {
+    self = [super init];
+    if (self) {
+        stationList = [[NSMutableArray alloc] init];
     }
+    return self;
 }
 
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-    if(!currentStationName) {
-        currentStationName = [[NSMutableString alloc] init];
+- (id)finishedParsing {
+    return [NSArray arrayWithArray:stationList];
+}
+
+- (void)foundElementWithName:(NSString *)name attributes:(NSDictionary *)attributes andContent:(NSString *)content {
+    
+    if ([name isEqualToString:@"station"]) {
+        IRailStation *station = [[IRailStation alloc] init];
+        
+        station.name = [NSString stringWithString:content];
+        station.xCoord = [[attributes objectForKey:@"locationX"] doubleValue];
+        station.yCoord = [[attributes objectForKey:@"locationY"] doubleValue];
+        
+        [stationList addObject:station];
+        [station release];
     }
     
-    [currentStationName appendString:string];
 }
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-    
-    if ([elementName isEqualToString:@"station"]) {
-        
-        [currentStation setName: [NSString stringWithString:currentStationName]];
-        [result addObject:currentStation];
-        
-        [currentStation release];
-        [currentStationName release];
-        currentStationName = nil;
-        
-    }
+- (void)dealloc {
+    [stationList release];
+    [super dealloc];
 }
 
 @end

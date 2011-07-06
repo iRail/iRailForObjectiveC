@@ -29,14 +29,14 @@
 
 #import <Foundation/Foundation.h>
 #import "IRailAPIDelegate.h"
-#import "IRailParserModule.h"
+#import "IRailAbstractParser.h"
 
 @interface IRailAPIAbstractCommand : NSObject {
     NSMutableData           *apiResponseData;
     
     NSURL                   *commandURL;
     id<IRailAPIDelegate>    delegate;
-    id<IRailParserModule>   parser;
+    IRailAbstractParser     *parser;
 }
 
 - (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl;

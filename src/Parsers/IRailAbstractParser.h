@@ -26,15 +26,24 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of iRail vzw/asbl.
  */
+
 #import <Foundation/Foundation.h>
 
 
 @interface IRailAbstractParser : NSObject<NSXMLParserDelegate> {
-    NSError *error;
-    id result;
+    @private
+    NSMutableArray      *nodeStack;
+    NSMutableString     *currentContent;
+    bool                error;
 }
 
 - (id)parseData:(NSData *)data;
-- (id)finish;
+
+//private
+//abstract methods
+- (void)startedParsing;
+- (void)errorOccured;
+- (id)finishedParsing;
+- (void)foundElementWithName:(NSString *)name attributes:(NSDictionary *)attributes andContent:(NSString *)content;
 
 @end

@@ -28,18 +28,15 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "IRailStation.h"
 
-@interface IRailVehicleStop : NSObject {
-    IRailStation *station;
-    NSDate *time;
-    int delay;
+
+@interface IRailParserNode : NSObject {
+    NSString *name, *content;
+    NSDictionary *attributes;
 }
 
-@property(nonatomic, retain) IRailStation *station;
-@property(nonatomic, retain) NSDate *time;
-@property(nonatomic, assign) int delay;
-
-- (id)initWithStation:(IRailStation *)aStation time:(NSDate *)aTime andDelay:(int)aDelay;
+@property(nonatomic, retain) NSString *name;
+@property(nonatomic, retain) NSString *content;
+@property(nonatomic, retain) NSDictionary *attributes;
 
 @end

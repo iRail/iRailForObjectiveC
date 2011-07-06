@@ -28,7 +28,10 @@
  */
 
 #import "IRailAPIAbstractCommand.h"
-
+@interface IRailAPIAbstractCommand()
+//abstract methods
+- (void)finishWithResult:(id)result;
+@end
 
 @implementation IRailAPIAbstractCommand
 
@@ -53,13 +56,9 @@
     [request release];
 }
 
-- (void)finishWithResult:(id)result {
-    //ABSTRACT METHOD
-    //implement with correct delegate call...
-}
-
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [delegate iRailApiCommandDidFailWithError:error];
+    [self release];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -67,18 +66,26 @@
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    id result = [parser parseData:apiResponseData];
+    id result = [[parser parseData:apiResponseData] retain];
     
     if( [result isKindOfClass:[NSError class]] ) {
         [delegate iRailApiCommandDidFailWithError:result];
     } else {
         [self finishWithResult:result];
-        [result release];
     }
 
+    [result release];
     [apiResponseData release];
+    
+    [pool release];
     [self release];
+}
+
+- (void)finishWithResult:(id)result {
+    //ABSTRACT METHOD
+    //implement with correct delegate call...
 }
 
 - (void)dealloc {

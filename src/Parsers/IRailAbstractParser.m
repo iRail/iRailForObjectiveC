@@ -28,14 +28,14 @@
  */
 
 #import "IRailAbstractParser.h"
-
+#import "IRailParserNode.h"
 
 @implementation IRailAbstractParser
 
 - (id)init {
     self = [super init];
     if (self) {
-        error = nil;
+        error = NO;
     }
     
     return self;
@@ -43,25 +43,97 @@
 
 - (id)parseData:(NSData *)data {
     
+    [self startedParsing];
+    
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
     [parser setDelegate:self];
     [parser parse];
     [parser release];
     
-    if(!error) return [self finish];
+    if(!error) {
+        return [self finishedParsing];
+    }
+    return nil;
+}
+
+
+
+- (void)parserDidStartDocument:(NSXMLParser *)parser {
+    nodeStack = [[NSMutableArray alloc] init];
+    [self startedParsing];
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
     
-    if(result) [result release];
-    return error;    
+    IRailParserNode *node = [[IRailParserNode alloc] init];
+    node.name = elementName;
+    node.attributes = attributeDict;
+    
+    [nodeStack addObject:node];
+    [node release];
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
+    if(!currentContent) {
+        currentContent = [NSMutableString new];
+    }
+    
+    [currentContent appendString:string];
+}
+
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
+
+    IRailParserNode *node = [nodeStack lastObject];
+    
+    NSString *contentString = nil;
+    if(currentContent)contentString = [[NSString alloc] initWithString:currentContent];
+    node.content = contentString;
+    [contentString release];
+    
+    if ([node.name isEqualToString:@"error"]) {
+        //do error stuff...
+    } else {
+        [self foundElementWithName:node.name attributes:node.attributes andContent:node.content];
+    }
+    
+    [currentContent release];
+    currentContent = nil;
+    [nodeStack removeLastObject];
+}
+
+- (void)parserDidEndDocument:(NSXMLParser *)parser {
+    //do stuff here?
+    [self finishedParsing];
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-    //TODO: make useful error...?
-    error = parseError;
+    error = YES;
+    [self errorOccured];
 }
 
-- (id)finish {
+- (void)dealloc {
+    [nodeStack release];
+    if(currentContent)[currentContent release];
+    
+    [super dealloc];
+}
+
+
+- (void)startedParsing {
+    //ABSTRACT METHOD
+}
+
+- (void)errorOccured {
+    //ABSTRACT METHOD
+}
+
+- (id)finishedParsing {
     //ABSTRACT METHOD
     return nil;
+}
+
+- (void)foundElementWithName:(NSString *)name attributes:(NSDictionary *)attributes andContent:(NSString *)content {
+    //ABSTRACT METHOD
 }
 
 @end

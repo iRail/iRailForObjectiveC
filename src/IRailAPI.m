@@ -67,27 +67,27 @@
 }
 
 - (NSURL *)generateUrlForPath:(NSString *)path andQueryParameters:(NSDictionary *)queryParameters {
-    URLBuilder *urlBuildler = [[URLBuilder alloc] initWithBaseURL:providerUrl];
+    URLBuilder *urlBuilder = [[URLBuilder alloc] initWithBaseURL:providerUrl];
     
-    [urlBuildler appendPath:path];
-    [urlBuildler appendField:@"lang" withValue:lang];
+    [urlBuilder appendPath:path];
+    [urlBuilder appendField:@"lang" withValue:lang];
     
     if(queryParameters != nil) {
         for(NSString *key in queryParameters) {
             NSString *value = [queryParameters objectForKey:key];
-            [urlBuildler appendField:key withValue:value];
+            [urlBuilder appendField:key withValue:value];
         }
     }
     
-    NSURL *url = [urlBuildler getURL];
-    [urlBuildler release];
+    NSURL *url = [urlBuilder getURL];
+    [urlBuilder release];
     
     return url;    
 }
 
 - (void)getStationList {
 
-    NSURL *url = [self generateUrlForPath:@"stations/" andQueryParameters:nil];
+    NSURL *url = [[self generateUrlForPath:@"stations/" andQueryParameters:nil] retain];
     
     IRailAPIAbstractCommand *command = [[IRailAPIStationsCommand alloc] initWithAPIDelegate:delegate andCommandURL:url];
     [command execute];
@@ -99,7 +99,7 @@
     
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:vehicleId forKey:@"id"];
-    NSURL *url = [self generateUrlForPath:@"vehicle/" andQueryParameters:query];
+    NSURL *url = [[self generateUrlForPath:@"vehicle/" andQueryParameters:query] retain];
     
     IRailAPIAbstractCommand *command = [[IRailAPIVehicleInfoCommand alloc] initWithAPIDelegate:delegate andCommandURL:url];
     [command execute];

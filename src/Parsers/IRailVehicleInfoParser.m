@@ -31,80 +31,62 @@
 
 @implementation IRailVehicleInfoParser
 
-- (id)finish {
+- (id)init {
+    self = [super init];
+    if (self) {
+        vehicleStops = [[NSMutableArray alloc] init];
+    }
     
-    ((IRailVehicle*)result).stops = vehicleStops;
-    
-    [vehicleStops release];
-    
-    return result;
+    return self;
 }
 
-- (void)parserDidStartDocument:(NSXMLParser *)parser {
-    result = [[IRailVehicle alloc] init];
+- (id)finishedParsing {
+    
+    IRailVehicle *vehicle = [[IRailVehicle alloc] init];
+    vehicle.vid = vehicleId;
+    vehicle.stops = [NSArray arrayWithArray:vehicleStops];
+    
+    
+    return [vehicle autorelease];
 }
 
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
+- (void)foundElementWithName:(NSString *)name attributes:(NSDictionary *)attributes andContent:(NSString *)content {
     
-    if([elementName isEqualToString:@"vehicle"]) {
+    if ([name isEqualToString:@"vehicle"]) {
+        vehicleId = [content retain];
         
-        currentNodeType = NODE_VEHICLE;
+    } else if([name isEqualToString:@"stop"]) {
         
-    } else if ([elementName isEqualToString:@"stops"]) {
-        vehicleStops = [[NSMutableArray alloc] initWithCapacity: [[attributeDict objectForKey:@"number"] intValue]];
-        
-    } else if([elementName isEqualToString:@"stop"]) {
-        
-        currentNodeType = NODE_STOP;
         IRailVehicleStop *stop = [[IRailVehicleStop alloc] init];
-        stop.delay = [[attributeDict objectForKey:@"delay"] intValue];
+        stop.delay = [[attributes objectForKey:@"delay"] intValue];
+        stop.station = currentStation;
+        stop.time = currentTime;
+        
         [vehicleStops addObject:stop];
         
         [stop release];
+        [currentStation release];
+        [currentTime release];
         
-    } else if([elementName isEqualToString:@"station"]) {
+    } else if([name isEqualToString:@"station"]) {
         
-        currentNodeType = NODE_STATION;
         currentStation = [[IRailStation alloc] init];
-        currentStation.xCoord = [[attributeDict objectForKey:@"locationX"] doubleValue];
-        currentStation.yCoord = [[attributeDict objectForKey:@"locationY"] doubleValue];
+        currentStation.sid = [attributes objectForKey:@"id"];
+        currentStation.name = content;
+        currentStation.xCoord = [[attributes objectForKey:@"locationX"] doubleValue];
+        currentStation.yCoord = [[attributes objectForKey:@"locationY"] doubleValue];
         
-    } else if([elementName isEqualToString:@"time"]) {
-        currentNodeType = NODE_TIME;
+    } else if([name isEqualToString:@"time"]) {
+        
+        currentTime = [[NSDate alloc] initWithTimeIntervalSince1970:[content longLongValue]];
+    
     }
 }
 
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-    if (!currentText) currentText = [[NSMutableString alloc] init];
-    [currentText appendString: string];
-}
-
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-    switch (currentNodeType) {
-        case NODE_VEHICLE:
-            ((IRailVehicle*)result).vid = [NSString stringWithString:currentText];
-            
-        case NODE_STATION:
-            currentStation.name = [NSString stringWithString:currentText];
-            ((IRailVehicleStop*)[vehicleStops objectAtIndex:[vehicleStops count]-1]).station = currentStation;
-            [currentStation release];
-            
-            break;
-        case NODE_TIME:
-            ((IRailVehicleStop*)[vehicleStops objectAtIndex:[vehicleStops count]-1]).date = [NSDate dateWithTimeIntervalSince1970:[currentText longLongValue]];
-            break;
-        default:
-            break;
-    }
-    
-    currentNodeType = NODE_IGNORE;
-
-    if(currentText){
-        [currentText release];
-        currentText = nil;
-    }
-    
-    
+- (void)dealloc {
+    [vehicleStops release];
+    [vehicleId release];
+    [super dealloc];
 }
 
 @end

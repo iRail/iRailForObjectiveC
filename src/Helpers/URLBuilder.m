@@ -73,9 +73,9 @@
     [newURL appendString:@"?"];
     [newURL appendString:query];
     
-    NSURL *theURL = [[NSURL alloc] initWithString:newURL];
-    
+    NSURL *theURL = [NSURL URLWithString:newURL];
     [newURL release];
+    
     return theURL;
 }
 

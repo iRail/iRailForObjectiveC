@@ -33,22 +33,12 @@
 #import "IRailVehicle.h"
 #import "IRailVehicleStop.h"
 
-typedef enum {
-    NODE_VEHICLE,
-    NODE_STOP,
-    NODE_STATION,
-    NODE_TIME,
-    NODE_IGNORE
-} IRailVehicleInfoNodeType;
-
-
 @interface IRailVehicleInfoParser : IRailAbstractParser {
-    NSMutableArray              *vehicleStops;
-    NSMutableString             *currentText;
+    NSMutableArray      *vehicleStops;
+    NSString            *vehicleId;
     
-    IRailStation                *currentStation;
-    
-    IRailVehicleInfoNodeType    currentNodeType;
+    IRailStation        *currentStation;
+    NSDate              *currentTime;
 }
 
 @end

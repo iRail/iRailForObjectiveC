@@ -27,19 +27,19 @@
  * or implied, of iRail vzw/asbl.
  */
 
-#import <Foundation/Foundation.h>
-#import "IRailStation.h"
+#import "IRailParserNode.h"
 
-@interface IRailVehicleStop : NSObject {
-    IRailStation *station;
-    NSDate *time;
-    int delay;
+
+@implementation IRailParserNode
+
+@synthesize name, content, attributes;
+
+- (void)dealloc {
+    [name release];
+    [attributes release];
+    if(content)[content release];
+    
+    [super dealloc];
 }
-
-@property(nonatomic, retain) IRailStation *station;
-@property(nonatomic, retain) NSDate *time;
-@property(nonatomic, assign) int delay;
-
-- (id)initWithStation:(IRailStation *)aStation time:(NSDate *)aTime andDelay:(int)aDelay;
 
 @end

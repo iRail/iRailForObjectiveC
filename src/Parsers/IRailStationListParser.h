@@ -32,8 +32,7 @@
 #import "IRailStation.h"
 
 @interface IRailStationListParser : IRailAbstractParser {
-    IRailStation *currentStation;
-    NSMutableString *currentStationName;
+    NSMutableArray      *stationList;
 }
 
 @end
