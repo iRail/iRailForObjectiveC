@@ -31,12 +31,15 @@
 
 
 @interface IRailParserNode : NSObject {
-    NSString *name, *content;
-    NSDictionary *attributes;
+    NSString        *name, *content;
+    NSDictionary    *attributes;
+    
+    IRailParserNode *parent;
 }
 
 @property(nonatomic, retain) NSString *name;
 @property(nonatomic, retain) NSString *content;
 @property(nonatomic, retain) NSDictionary *attributes;
+@property(nonatomic, retain) IRailParserNode *parent;
 
 @end

@@ -32,11 +32,12 @@
 
 @implementation IRailParserNode
 
-@synthesize name, content, attributes;
+@synthesize name, content, attributes, parent;
 
 - (void)dealloc {
     [name release];
     [attributes release];
+    if(parent)[parent release];
     if(content)[content release];
     
     [super dealloc];

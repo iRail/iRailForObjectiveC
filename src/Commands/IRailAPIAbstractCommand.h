@@ -42,4 +42,8 @@
 - (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl;
 - (void)execute;
 
+//private
+//abstract methods
+- (void)finishWithResult:(id)result;
+
 @end

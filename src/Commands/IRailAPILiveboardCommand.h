@@ -27,68 +27,11 @@
  * or implied, of iRail vzw/asbl.
  */
 
+#import <Foundation/Foundation.h>
 #import "IRailAPIAbstractCommand.h"
 
-@implementation IRailAPIAbstractCommand
-
-- (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl {
-    self = [super init];
-    if (self) {
-        self->delegate = [aDelegate retain];
-        self->commandURL = [aUrl retain];
-    }
+@interface IRailAPILiveboardCommand : IRailAPIAbstractCommand {
     
-    return self;
-}
-
-- (void)execute {
-    
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:commandURL];
-    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
-    if (connection) {
-        apiResponseData = [[NSMutableData alloc] init];
-    }
-    
-    [request release];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [delegate iRailApiCommandDidFailWithError:error];
-    [self release];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [apiResponseData appendData:data];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
-    id result = [[parser parseData:apiResponseData] retain];
-    
-    if( !result ) {
-        //Call error
-    } else {
-        [self finishWithResult:result];
-    }
-
-    [result release];
-    [apiResponseData release];
-    
-    [pool release];
-    [self release];
-}
-
-- (void)finishWithResult:(id)result {
-    //ABSTRACT METHOD
-    //implement with correct delegate call...
-}
-
-- (void)dealloc {
-    [delegate release];
-    [parser release];
-    [commandURL release];
-    [super dealloc];
 }
 
 @end

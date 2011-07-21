@@ -28,6 +28,7 @@
  */
 
 #import <Foundation/Foundation.h>
+#import "IRailParserNode.h"
 
 
 @interface IRailAbstractParser : NSObject<NSXMLParserDelegate> {
@@ -45,5 +46,7 @@
 - (void)errorOccured;
 - (id)finishedParsing;
 - (void)foundElementWithName:(NSString *)name attributes:(NSDictionary *)attributes andContent:(NSString *)content;
+
+- (void)foundElement:(IRailParserNode *)element;
 
 @end

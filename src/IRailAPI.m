@@ -32,6 +32,7 @@
 
 #import "IRailAPIStationsCommand.h"
 #import "IRailAPIVehicleInfoCommand.h"
+#import "IRailAPILiveboardCommand.h"
 
 @interface IRailAPI(Private)
 - (NSURL *)generateUrlForPath:(NSString *)path andQueryParameters:(NSDictionary *)queryParameters;
@@ -107,4 +108,19 @@
     [url release];
     [query release];
 }
+
+- (void)getLiveboardForStation:(NSString *)stationName {
+    
+    NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
+    [query setValue:stationName forKey:@"station"];
+    NSURL *url = [[self generateUrlForPath:@"liveboard/" andQueryParameters:query] retain];
+    
+    IRailAPIAbstractCommand *command = [[IRailAPILiveboardCommand alloc] initWithAPIDelegate:delegate andCommandURL:url];
+    [command execute];
+    
+    [url release];
+    [query release];
+    
+}
+
 @end

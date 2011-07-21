@@ -28,7 +28,6 @@
  */
 
 #import "IRailAbstractParser.h"
-#import "IRailParserNode.h"
 
 @implementation IRailAbstractParser
 
@@ -69,6 +68,10 @@
     node.name = elementName;
     node.attributes = attributeDict;
     
+    if ([nodeStack count] > 0) {
+        node.parent = [nodeStack lastObject];
+    }
+    
     [nodeStack addObject:node];
     [node release];
 }
@@ -93,7 +96,8 @@
     if ([node.name isEqualToString:@"error"]) {
         //do error stuff...
     } else {
-        [self foundElementWithName:node.name attributes:node.attributes andContent:node.content];
+        //[self foundElementWithName:node.name attributes:node.attributes andContent:node.content];
+        [self foundElement:[nodeStack lastObject]];
     }
     
     [currentContent release];
@@ -133,6 +137,10 @@
 }
 
 - (void)foundElementWithName:(NSString *)name attributes:(NSDictionary *)attributes andContent:(NSString *)content {
+    //ABSTRACT METHOD
+}
+
+- (void)foundElement:(IRailParserNode *)element {
     //ABSTRACT METHOD
 }
 

@@ -32,6 +32,7 @@
 
 #import "IRailStation.h"
 #import "IRailVehicle.h"
+#import "IRailLiveboard.h"
 
 @interface IRailAPI : NSObject {
     id<IRailAPIDelegate> delegate;
@@ -49,5 +50,6 @@
 
 - (void)getStationList;
 - (void)getInfoForVehicleWithId:(NSString *)vehicleId;
+- (void)getLiveboardForStation:(NSString *)stationName;
 
 @end

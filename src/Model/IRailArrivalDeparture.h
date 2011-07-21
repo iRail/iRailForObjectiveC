@@ -26,69 +26,19 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of iRail vzw/asbl.
  */
+#import <Foundation/Foundation.h>
+#import "IRailStation.h"
 
-#import "IRailAPIAbstractCommand.h"
-
-@implementation IRailAPIAbstractCommand
-
-- (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl {
-    self = [super init];
-    if (self) {
-        self->delegate = [aDelegate retain];
-        self->commandURL = [aUrl retain];
-    }
-    
-    return self;
+@interface IRailArrivalDeparture : NSObject {
+    IRailStation    *station;
+    NSString        *vehicleId;
+    NSDate          *time;
+    int             platform;
 }
 
-- (void)execute {
-    
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:commandURL];
-    NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
-    if (connection) {
-        apiResponseData = [[NSMutableData alloc] init];
-    }
-    
-    [request release];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [delegate iRailApiCommandDidFailWithError:error];
-    [self release];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [apiResponseData appendData:data];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
-    id result = [[parser parseData:apiResponseData] retain];
-    
-    if( !result ) {
-        //Call error
-    } else {
-        [self finishWithResult:result];
-    }
-
-    [result release];
-    [apiResponseData release];
-    
-    [pool release];
-    [self release];
-}
-
-- (void)finishWithResult:(id)result {
-    //ABSTRACT METHOD
-    //implement with correct delegate call...
-}
-
-- (void)dealloc {
-    [delegate release];
-    [parser release];
-    [commandURL release];
-    [super dealloc];
-}
+@property(nonatomic, retain) IRailStation *station;
+@property(nonatomic, retain) NSString *vehicleId;
+@property(nonatomic, retain) NSDate *time;
+@property(nonatomic, assign) int platform;
 
 @end
