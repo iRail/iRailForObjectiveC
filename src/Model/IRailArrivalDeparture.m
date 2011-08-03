@@ -32,7 +32,7 @@
 
 @implementation IRailArrivalDeparture
 
-@synthesize station, vehicleId, time, platform;
+@synthesize station, vehicleId, time, delay, platform;
 
 - (void)dealloc {
     [station release];

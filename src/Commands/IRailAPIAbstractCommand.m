@@ -67,7 +67,8 @@
     id result = [[parser parseData:apiResponseData] retain];
     
     if( !result ) {
-        //Call error
+        //TODO: Proper NSError object...
+        [delegate iRailApiCommandDidFailWithError:nil];
     } else {
         [self finishWithResult:result];
     }

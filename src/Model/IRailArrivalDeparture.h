@@ -33,12 +33,14 @@
     IRailStation    *station;
     NSString        *vehicleId;
     NSDate          *time;
+    int             delay;
     int             platform;
 }
 
 @property(nonatomic, retain) IRailStation *station;
 @property(nonatomic, retain) NSString *vehicleId;
 @property(nonatomic, retain) NSDate *time;
+@property(nonatomic, assign) int delay;
 @property(nonatomic, assign) int platform;
 
 @end

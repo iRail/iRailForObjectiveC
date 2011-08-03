@@ -80,6 +80,7 @@
         departure.vehicleId = currentVehicleId;
         departure.station = currentStation;
         departure.time = currentTime;
+        departure.delay = [[element.attributes objectForKey:@"delay"] intValue];
         departure.platform = currentPlatform;
         
         [departureList addObject:departure];
