@@ -29,19 +29,22 @@
 
 #import <Foundation/Foundation.h>
 
+#import "IRailParserNode.h"
 
-@interface IRailParserNode : NSObject {
-    NSString        *name, *content;
-    NSDictionary    *attributes;
+#import "IRailStation.h"
+#import "IRailVehicle.h"
+#import "IRailVehicleStop.h"
+#import "IRailTransfer.h"
+#import "IRailArrivalDeparture.h"
+#import "IRailLiveboard.h"
+
+@interface iRailModelGenerator : NSObject {
     
-    NSMutableArray *children;
-    IRailParserNode *parent;
 }
 
-@property(nonatomic, retain) NSString *name;
-@property(nonatomic, retain) NSString *content;
-@property(nonatomic, retain) NSDictionary *attributes;
-@property(nonatomic, retain) NSMutableArray *children;
-@property(nonatomic, assign) IRailParserNode *parent;
++ (IRailStation *)generateStationForNode:(IRailParserNode *)node;
++ (IRailVehicle *)generateVehicleForNode:(IRailParserNode *)node;
++ (IRailVehicle *)generateVehicleInformationForVehicle:(IRailVehicle *) vehicle withNode:(IRailParserNode *)node;
++ (IRailArrivalDeparture *)generateArrivalDepartureForNode:(IRailParserNode *)node;
 
 @end

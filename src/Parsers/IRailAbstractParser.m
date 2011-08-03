@@ -69,11 +69,15 @@
     node.attributes = attributeDict;
     
     if ([nodeStack count] > 0) {
-        node.parent = [nodeStack lastObject];
+        IRailParserNode *lastNode = [nodeStack lastObject];
+        
+        [lastNode.children addObject:node];
+        node.parent = lastNode;
     }
     
     [nodeStack addObject:node];
     [node release];
+    
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
@@ -89,25 +93,24 @@
     IRailParserNode *node = [nodeStack lastObject];
     
     NSString *contentString = nil;
+    
     if(currentContent)contentString = [[NSString alloc] initWithString:currentContent];
     node.content = contentString;
+    
     [contentString release];
+    [currentContent release];
+    currentContent = nil;
     
     if ([node.name isEqualToString:@"error"]) {
         //do error stuff...
     } else {
-        //[self foundElementWithName:node.name attributes:node.attributes andContent:node.content];
         [self foundElement:[nodeStack lastObject]];
     }
     
-    [currentContent release];
-    currentContent = nil;
-    [nodeStack removeLastObject];
+    [nodeStack removeLastObject];    
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
-    //do stuff here?
-    [self finishedParsing];
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {

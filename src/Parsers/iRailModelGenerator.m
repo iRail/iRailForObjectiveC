@@ -1,0 +1,110 @@
+/*
+ * Copyright (c) 2011 iRail vzw/asbl.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, are
+ * permitted provided that the following conditions are met:
+ *
+ *   1. Redistributions of source code must retain the above copyright notice, this list of
+ *      conditions and the following disclaimer.
+ *
+ *   2. Redistributions in binary form must reproduce the above copyright notice, this list
+ *      of conditions and the following disclaimer in the documentation and/or other materials
+ *      provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+ * ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * The views and conclusions contained in the software and documentation are those of the
+ * authors and should not be interpreted as representing official policies, either expressed
+ * or implied, of iRail vzw/asbl.
+ */
+
+#import "iRailModelGenerator.h"
+
+
+@implementation iRailModelGenerator
+
++ (IRailStation *)generateStationForNode:(IRailParserNode *)node {
+    if ( ![node.name isEqualToString:@"station"] ) return nil;
+    
+    IRailStation *station = [[[IRailStation alloc] init] autorelease];
+    station.name = node.content;
+    station.xCoord = [[node.attributes objectForKey:@"locationX"] doubleValue];
+    station.yCoord = [[node.attributes objectForKey:@"locationY"] doubleValue];
+    
+    return station;
+}
+
++ (IRailVehicle *)generateVehicleForNode:(IRailParserNode *)node {
+    if( ![node.name isEqualToString:@"vehicle"] ) return nil;
+    
+    IRailVehicle *vehicle = [[IRailVehicle alloc] init];
+    vehicle.vid = node.content;
+    
+    return [vehicle autorelease];
+}
+
++ (IRailVehicle *)generateVehicleInformationForVehicle:(IRailVehicle *) vehicle withNode:(IRailParserNode *)node {
+    
+    if ( [node.name isEqualToString:@"stops"] ) {
+        
+        NSMutableArray *stops = [[NSMutableArray alloc] init];
+        
+        for (int i = 0; i < [node.children count]; i++) {
+            IRailParserNode *curnode = [node.children objectAtIndex:i];
+            
+            IRailVehicleStop *stop = [[IRailVehicleStop alloc] init];
+            
+            for(int j = 0; j < [curnode.children count]; j++) {
+                IRailParserNode *curnode2 = [curnode.children objectAtIndex:j];
+                if ([curnode2.name isEqualToString:@"station"]) {
+                    stop.station = [iRailModelGenerator generateStationForNode:curnode2];
+                } else if ([curnode2.name isEqualToString:@"time"]) {
+                    NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970: [curnode2.content longLongValue]];
+                    stop.time = date;
+                    [date release];
+                }
+            }
+            [stops addObject:stop];
+            [stop release];
+        }
+        
+        vehicle.stops = [NSArray arrayWithArray:stops];
+        [stops release];
+    }
+    
+    return vehicle;
+}
+
++ (IRailArrivalDeparture *)generateArrivalDepartureForNode:(IRailParserNode *)node {
+    if ( ![node.name isEqualToString:@"departure"] && ![node.name isEqualToString:@"arrival"] ) return nil;
+    
+    IRailArrivalDeparture *arrivalDeparture = [[[IRailArrivalDeparture alloc] init] autorelease];
+    for (int i = 0; i < [node.children count]; i++) {
+        IRailParserNode *curnode = [node.children objectAtIndex:i];
+        
+        if ( [curnode.name isEqualToString:@"station"] ) {
+            arrivalDeparture.station = [iRailModelGenerator generateStationForNode:curnode];
+        } else if ( [curnode.name isEqualToString:@"vehicle"] ) {
+            arrivalDeparture.vehicleId = curnode.content;
+        } else if ( [curnode.name isEqualToString:@"time"] ) {
+            NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970: [curnode.content longLongValue]];
+            arrivalDeparture.time = date;
+            [date release];
+        } else if ( [curnode.name isEqualToString:@"platform"] ) {
+            arrivalDeparture.platform = [curnode.content intValue];
+        }
+    }
+    
+    return arrivalDeparture;
+}
+
+@end

@@ -44,19 +44,10 @@
     return [NSArray arrayWithArray:stationList];
 }
 
-- (void)foundElementWithName:(NSString *)name attributes:(NSDictionary *)attributes andContent:(NSString *)content {
-    
-    if ([name isEqualToString:@"station"]) {
-        IRailStation *station = [[IRailStation alloc] init];
-        
-        station.name = [NSString stringWithString:content];
-        station.xCoord = [[attributes objectForKey:@"locationX"] doubleValue];
-        station.yCoord = [[attributes objectForKey:@"locationY"] doubleValue];
-        
-        [stationList addObject:station];
-        [station release];
+- (void)foundElement:(IRailParserNode *)element {
+    if ([element.name isEqualToString:@"station"]) {
+        [stationList addObject: [iRailModelGenerator generateStationForNode:element]];
     }
-    
 }
 
 - (void)dealloc {

@@ -32,12 +32,23 @@
 
 @implementation IRailParserNode
 
-@synthesize name, content, attributes, parent;
+@synthesize name, content, attributes, children, parent;
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        parent = nil;
+        content = nil;
+        children = [[NSMutableArray alloc] init];
+    }
+    
+    return self;
+}
 
 - (void)dealloc {
     [name release];
     [attributes release];
-    if(parent)[parent release];
+    [children release];
     if(content)[content release];
     
     [super dealloc];

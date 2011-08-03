@@ -36,65 +36,31 @@
     self = [super init];
     if (self) {
         departureList = [[NSMutableArray alloc] init];
+        liveboard = [[IRailLiveboard alloc] init];
     }
     return self;
 }
 
 - (id)finishedParsing {
-    IRailLiveboard *liveboard = [[IRailLiveboard alloc] init];
-    liveboard.station = departureStation;
-    liveboard.departureList = departureList;
     
-    return [liveboard autorelease];
+    liveboard.departureList = [NSArray arrayWithArray:departureList];
+    return liveboard;
+    
 }
 
 - (void)foundElement:(IRailParserNode *)element {
     
     if ([element.name isEqualToString:@"station"]) {
-        
-        IRailStation *station = [[IRailStation alloc] init];
-        station.name = element.content;
-        station.xCoord = [[element.attributes objectForKey:@"locationX"] doubleValue];
-        station.yCoord = [[element.attributes objectForKey:@"locationY"] doubleValue];
-        
-        if ([element.parent.name isEqualToString:@"departure"]) {
-            currentStation = [station retain];
-        } else {
-            departureStation = [station retain];
-        }
-        
-        [station release];
-        
-    } else if([element.name isEqualToString:@"vehicle"]) {        
-        currentVehicleId = [element.content retain];
-        
-    } else if([element.name isEqualToString:@"time"]) {
-        currentTime = [[NSDate alloc] initWithTimeIntervalSince1970:[element.content longLongValue]];
-        
-    } else if([element.name isEqualToString:@"platform"]) {
-        currentPlatform = [element.content intValue];
-        
-    } else if([element.name isEqualToString:@"departure"]) {
-    
-        IRailArrivalDeparture *departure = [[IRailArrivalDeparture alloc] init];
-        departure.vehicleId = currentVehicleId;
-        departure.station = currentStation;
-        departure.time = currentTime;
-        departure.delay = [[element.attributes objectForKey:@"delay"] intValue];
-        departure.platform = currentPlatform;
-        
-        [departureList addObject:departure];
-        
-        [currentVehicleId release];
-        [currentStation release];
-        [currentTime release];
-        [departure release];
+        liveboard.station = [iRailModelGenerator generateStationForNode:element];
+    } else if ([element.name isEqualToString:@"departure"]) {
+        [departureList addObject: [iRailModelGenerator generateArrivalDepartureForNode:element] ];
     }
+    
 }
 
 - (void)dealloc {
-    [departureStation release];
     [departureList release];
+    [liveboard release];
     [super dealloc];
 }
 

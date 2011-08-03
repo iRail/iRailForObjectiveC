@@ -34,11 +34,7 @@
 #import "IRailVehicleStop.h"
 
 @interface IRailVehicleInfoParser : IRailAbstractParser {
-    NSMutableArray      *vehicleStops;
-    NSString            *vehicleId;
-    
-    IRailStation        *currentStation;
-    NSDate              *currentTime;
+    IRailVehicle *vehicle;
 }
 
 @end

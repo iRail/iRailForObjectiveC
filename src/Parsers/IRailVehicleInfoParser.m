@@ -34,7 +34,6 @@
 - (id)init {
     self = [super init];
     if (self) {
-        vehicleStops = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -42,50 +41,21 @@
 
 - (id)finishedParsing {
     
-    IRailVehicle *vehicle = [[IRailVehicle alloc] init];
-    vehicle.vid = vehicleId;
-    vehicle.stops = [NSArray arrayWithArray:vehicleStops];
-    
-    
-    return [vehicle autorelease];
+    return vehicle;
 }
 
-- (void)foundElementWithName:(NSString *)name attributes:(NSDictionary *)attributes andContent:(NSString *)content {
+- (void)foundElement:(IRailParserNode *)element {
     
-    if ([name isEqualToString:@"vehicle"]) {
-        vehicleId = [content retain];
-        
-    } else if([name isEqualToString:@"stop"]) {
-        
-        IRailVehicleStop *stop = [[IRailVehicleStop alloc] init];
-        stop.delay = [[attributes objectForKey:@"delay"] intValue];
-        stop.station = currentStation;
-        stop.time = currentTime;
-        
-        [vehicleStops addObject:stop];
-        
-        [stop release];
-        [currentStation release];
-        [currentTime release];
-        
-    } else if([name isEqualToString:@"station"]) {
-        
-        currentStation = [[IRailStation alloc] init];
-        currentStation.sid = [attributes objectForKey:@"id"];
-        currentStation.name = content;
-        currentStation.xCoord = [[attributes objectForKey:@"locationX"] doubleValue];
-        currentStation.yCoord = [[attributes objectForKey:@"locationY"] doubleValue];
-        
-    } else if([name isEqualToString:@"time"]) {
-        
-        currentTime = [[NSDate alloc] initWithTimeIntervalSince1970:[content longLongValue]];
-    
+    if ([element.name isEqualToString:@"vehicle"]) {
+        vehicle = [[iRailModelGenerator generateVehicleForNode:element] retain];
+    } else if ([element.name isEqualToString:@"stops"]) {
+        [iRailModelGenerator generateVehicleInformationForVehicle:vehicle withNode:element];
     }
+    
 }
 
 - (void)dealloc {
-    [vehicleStops release];
-    [vehicleId release];
+    [vehicle release];
     [super dealloc];
 }
 

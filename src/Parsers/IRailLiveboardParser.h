@@ -34,13 +34,8 @@
 #import "IRailArrivalDeparture.h"
 
 @interface IRailLiveboardParser : IRailAbstractParser {
-    IRailStation    *departureStation;
-    NSMutableArray  *departureList;
-    
-    NSString        *currentVehicleId;
-    IRailStation    *currentStation;
-    NSDate          *currentTime;
-    int             currentPlatform;
+    NSMutableArray  *departureList;    
+    IRailLiveboard *liveboard;
 }
 
 @end
