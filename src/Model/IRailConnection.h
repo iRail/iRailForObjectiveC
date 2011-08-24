@@ -27,41 +27,27 @@
  * or implied, of iRail vzw/asbl.
  */
 
-#import "IRailLiveboardParser.h"
+#import <Foundation/Foundation.h>
 
+#import "IRailArrivalDeparture.h"
 
-@implementation IRailLiveboardParser
+typedef enum DATE_TYPE {
+    DATE_ARRIVAL,
+    DATE_DEPARTURE
+}IRailDateType;
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        departureList = [[NSMutableArray alloc] init];
-        liveboard = [[IRailLiveboard alloc] init];
-    }
-    return self;
-}
-
-- (id)finishedParsing {
-    
-    liveboard.departureList = [NSArray arrayWithArray:departureList];
-    return liveboard;
+@interface IRailConnection : NSObject {
+    IRailArrivalDeparture   *departure, *arrival;
+    NSArray                 *transfers;
+    int                     duration;
+    bool                    delay;
     
 }
 
-- (void)foundElement:(IRailParserNode *)element {
-    
-    if ([element.name isEqualToString:@"station"]) {
-        liveboard.station = [IRailModelGenerator generateStationForNode:element];
-    } else if ([element.name isEqualToString:@"departure"]) {
-        [departureList addObject: [IRailModelGenerator generateArrivalDepartureForNode:element] ];
-    }
-    
-}
-
-- (void)dealloc {
-    [departureList release];
-    [liveboard release];
-    [super dealloc];
-}
+@property(nonatomic, retain) IRailArrivalDeparture *departure;
+@property(nonatomic, retain) IRailArrivalDeparture *arrival;
+@property(nonatomic, retain) NSArray *transfers;
+@property(nonatomic, assign) int duration;
+@property(nonatomic, assign) bool delay;
 
 @end

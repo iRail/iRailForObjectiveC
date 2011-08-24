@@ -33,6 +33,7 @@
 #import "IRailAPIStationsCommand.h"
 #import "IRailAPIVehicleInfoCommand.h"
 #import "IRailAPILiveboardCommand.h"
+#import "IRailAPIConnectionCommand.h"
 
 @interface IRailAPI(Private)
 - (NSURL *)generateUrlForPath:(NSString *)path andQueryParameters:(NSDictionary *)queryParameters;
@@ -86,7 +87,7 @@
     return url;    
 }
 
-- (void)getStationList {
+- (void)callStationListCommand {
 
     NSURL *url = [[self generateUrlForPath:@"stations/" andQueryParameters:nil] retain];
     
@@ -96,7 +97,7 @@
     [url release];    
 }
 
-- (void)getInfoForVehicleWithId:(NSString *)vehicleId {
+- (void)callInfoForVehicleCommandWithId:(NSString *)vehicleId {
     
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:vehicleId forKey:@"id"];
@@ -109,7 +110,7 @@
     [query release];
 }
 
-- (void)getLiveboardForStation:(NSString *)stationName {
+- (void)callLiveboardCommandForStation:(NSString *)stationName {
     
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:stationName forKey:@"station"];
@@ -123,4 +124,51 @@
     
 }
 
+- (void)callConnectionCommandWithDepartureName:(NSString *) fromName andArrivalName:(NSString *) toName {
+    
+    NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
+    [query setValue:fromName forKey:@"from"];
+    [query setValue:toName forKey:@"to"];
+    
+    NSURL *url = [[self generateUrlForPath:@"connections/" andQueryParameters:query] retain];
+
+    IRailAPIAbstractCommand *command = [[IRailAPIConnectionCommand alloc] initWithAPIDelegate:delegate andCommandURL:url];
+    [command execute];
+
+    [url release];
+    [query release];
+}
+
+- (void)callConnectionCommandWithDepartureName:(NSString *) fromName arrivalName:(NSString *) toName date:(NSDate *)date andDateType:(IRailDateType) dateType {
+   
+    NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
+    [query setValue:fromName forKey:@"from"];
+    [query setValue:toName forKey:@"to"];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"ddMMyy"];
+    [query setValue:[dateFormatter stringFromDate:date] forKey:@"date"];
+    
+    [dateFormatter setDateFormat:@"hhmm"];
+    [query setValue:[dateFormatter stringFromDate:date] forKey:@"time"];
+    [dateFormatter release];
+    
+    switch( dateType ) {
+        case DATE_ARRIVAL:
+            [query setValue:@"arrive" forKey:@"timeSel"];
+            break;
+        case DATE_DEPARTURE:
+            [query setValue:@"depart" forKey:@"timeSel"];
+            break;
+    }
+    
+    NSURL *url = [[self generateUrlForPath:@"connections/" andQueryParameters:query] retain];
+    
+    IRailAPIAbstractCommand *command = [[IRailAPIConnectionCommand alloc] initWithAPIDelegate:delegate andCommandURL:url];
+    [command execute];
+    
+    [url release];
+    [query release];
+}
+    
 @end

@@ -26,42 +26,24 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of iRail vzw/asbl.
  */
+#import "IRailAPIConnectionCommand.h"
+#import "IRailConnectionParser.h"
 
-#import "IRailLiveboardParser.h"
+@implementation IRailAPIConnectionCommand
 
-
-@implementation IRailLiveboardParser
-
-- (id)init {
-    self = [super init];
+- (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl {
+    self = [super initWithAPIDelegate:aDelegate andCommandURL:aUrl];
     if (self) {
-        departureList = [[NSMutableArray alloc] init];
-        liveboard = [[IRailLiveboard alloc] init];
+        parser = [[IRailConnectionParser alloc] init];
     }
+    
     return self;
 }
 
-- (id)finishedParsing {
-    
-    liveboard.departureList = [NSArray arrayWithArray:departureList];
-    return liveboard;
-    
-}
-
-- (void)foundElement:(IRailParserNode *)element {
-    
-    if ([element.name isEqualToString:@"station"]) {
-        liveboard.station = [IRailModelGenerator generateStationForNode:element];
-    } else if ([element.name isEqualToString:@"departure"]) {
-        [departureList addObject: [IRailModelGenerator generateArrivalDepartureForNode:element] ];
+- (void)finishWithResult:(id)result {
+    if ([delegate respondsToSelector:@selector(iRailApiCommandDidFinishReceivingConnections:)]) {
+        [delegate iRailApiCommandDidFinishReceivingConnections:result];
     }
-    
-}
-
-- (void)dealloc {
-    [departureList release];
-    [liveboard release];
-    [super dealloc];
 }
 
 @end

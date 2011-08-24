@@ -27,41 +27,14 @@
  * or implied, of iRail vzw/asbl.
  */
 
-#import "IRailLiveboardParser.h"
+#import <Foundation/Foundation.h>
+#import "IRailAbstractParser.h"
 
+#import "IRailConnection.h"
 
-@implementation IRailLiveboardParser
-
-- (id)init {
-    self = [super init];
-    if (self) {
-        departureList = [[NSMutableArray alloc] init];
-        liveboard = [[IRailLiveboard alloc] init];
-    }
-    return self;
-}
-
-- (id)finishedParsing {
-    
-    liveboard.departureList = [NSArray arrayWithArray:departureList];
-    return liveboard;
-    
-}
-
-- (void)foundElement:(IRailParserNode *)element {
-    
-    if ([element.name isEqualToString:@"station"]) {
-        liveboard.station = [IRailModelGenerator generateStationForNode:element];
-    } else if ([element.name isEqualToString:@"departure"]) {
-        [departureList addObject: [IRailModelGenerator generateArrivalDepartureForNode:element] ];
-    }
-    
-}
-
-- (void)dealloc {
-    [departureList release];
-    [liveboard release];
-    [super dealloc];
+@interface IRailConnectionParser : IRailAbstractParser {
+    IRailConnection *connection;
+    NSMutableArray *connections;
 }
 
 @end

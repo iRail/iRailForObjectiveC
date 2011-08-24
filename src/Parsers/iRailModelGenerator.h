@@ -38,7 +38,7 @@
 #import "IRailArrivalDeparture.h"
 #import "IRailLiveboard.h"
 
-@interface iRailModelGenerator : NSObject {
+@interface IRailModelGenerator : NSObject {
     
 }
 
@@ -46,5 +46,6 @@
 + (IRailVehicle *)generateVehicleForNode:(IRailParserNode *)node;
 + (IRailVehicle *)generateVehicleInformationForVehicle:(IRailVehicle *) vehicle withNode:(IRailParserNode *)node;
 + (IRailArrivalDeparture *)generateArrivalDepartureForNode:(IRailParserNode *)node;
++ (NSArray *)generateTransfersForNode:(IRailParserNode *)node;
 
 @end

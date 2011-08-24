@@ -27,40 +27,53 @@
  * or implied, of iRail vzw/asbl.
  */
 
-#import "IRailLiveboardParser.h"
+#import "IRailConnectionParser.h"
+#import "IRailAbstractParser.h"
 
-
-@implementation IRailLiveboardParser
+@implementation IRailConnectionParser
 
 - (id)init {
     self = [super init];
     if (self) {
-        departureList = [[NSMutableArray alloc] init];
-        liveboard = [[IRailLiveboard alloc] init];
+        connection = [[IRailConnection alloc] init];
+        connections = [[NSMutableArray alloc] init];
     }
+    
     return self;
 }
 
 - (id)finishedParsing {
-    
-    liveboard.departureList = [NSArray arrayWithArray:departureList];
-    return liveboard;
-    
+    return connections;
 }
 
 - (void)foundElement:(IRailParserNode *)element {
     
-    if ([element.name isEqualToString:@"station"]) {
-        liveboard.station = [IRailModelGenerator generateStationForNode:element];
-    } else if ([element.name isEqualToString:@"departure"]) {
-        [departureList addObject: [IRailModelGenerator generateArrivalDepartureForNode:element] ];
+    if ([element.name isEqualToString:@"connection"]) {
+        [connections addObject:connection];
+        
+        [connection release];
+        connection = [[IRailConnection alloc] init];
+        
+    } else if ([element.name isEqualToString:@"arrival"] && [element.parent.name isEqualToString:@"connection"]) {
+        connection.arrival = [IRailModelGenerator generateArrivalDepartureForNode:element];
+    } else if ([element.name isEqualToString:@"departure"] && [element.parent.name isEqualToString:@"connection"]) {
+        connection.departure = [IRailModelGenerator generateArrivalDepartureForNode:element];
+    } else if ([element.name isEqualToString:@"duration"]) {
+        connection.duration = [element.content intValue];
+        if ([element.attributes objectForKey:@"delay"] != nil) {
+            connection.delay = YES;
+        } else {
+            connection.delay = NO;
+        }
+        
+    } else if ([element.name isEqualToString:@"vias"]) {
+        connection.transfers = [IRailModelGenerator generateTransfersForNode:element];
     }
-    
 }
 
 - (void)dealloc {
-    [departureList release];
-    [liveboard release];
+    [connection release];
+    [connections release];
     [super dealloc];
 }
 

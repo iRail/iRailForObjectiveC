@@ -32,4 +32,16 @@
 
 @implementation IRailTransfer
 
+@synthesize departure, arrival, station, trainDirection, vehicle, timeBetween;
+
+- (void)dealloc {
+    [departure release];
+    [arrival release];
+    [station release];
+    [trainDirection release];
+    [vehicle release];
+    
+    [super dealloc];
+}
+
 @end

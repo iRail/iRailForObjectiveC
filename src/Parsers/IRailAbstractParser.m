@@ -139,10 +139,6 @@
     return nil;
 }
 
-- (void)foundElementWithName:(NSString *)name attributes:(NSDictionary *)attributes andContent:(NSString *)content {
-    //ABSTRACT METHOD
-}
-
 - (void)foundElement:(IRailParserNode *)element {
     //ABSTRACT METHOD
 }

@@ -46,7 +46,7 @@
 
 - (void)foundElement:(IRailParserNode *)element {
     if ([element.name isEqualToString:@"station"]) {
-        [stationList addObject: [iRailModelGenerator generateStationForNode:element]];
+        [stationList addObject: [IRailModelGenerator generateStationForNode:element]];
     }
 }
 

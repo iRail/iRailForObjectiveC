@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class IRailVehicle, IRailLiveboard;
+@class IRailVehicle, IRailLiveboard, IRailConnection;
 
 @protocol IRailAPIDelegate <NSObject>
 
@@ -39,5 +39,6 @@
 - (void)iRailApiCommandDidFinishReceivingStationList:(NSArray *)stationList;
 - (void)iRailApiCommandDidFinishReceivingVehicleInfo:(IRailVehicle *)vehicle;
 - (void)iRailapiCommandDidFinishReceivingLiveboard:(IRailLiveboard *)liveboard;
+- (void)iRailApiCommandDidFinishReceivingConnections:(NSArray *)connections;
 
 @end

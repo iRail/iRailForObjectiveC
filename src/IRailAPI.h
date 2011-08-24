@@ -33,6 +33,7 @@
 #import "IRailStation.h"
 #import "IRailVehicle.h"
 #import "IRailLiveboard.h"
+#import "IRailConnection.h"
 
 @interface IRailAPI : NSObject {
     id<IRailAPIDelegate> delegate;
@@ -48,8 +49,11 @@
 - (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate andLanguage:(NSString *)aLang;
 - (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate language:(NSString *)aLang andProviderURL:(NSString *)aProvider;
 
-- (void)getStationList;
-- (void)getInfoForVehicleWithId:(NSString *)vehicleId;
-- (void)getLiveboardForStation:(NSString *)stationName;
+- (void)callStationListCommand;
+- (void)callInfoForVehicleCommandWithId:(NSString *)vehicleId;
+- (void)callLiveboardCommandForStation:(NSString *)stationName;
+
+- (void)callConnectionCommandWithDepartureName:(NSString *) fromName andArrivalName:(NSString *) toName;
+- (void)callConnectionCommandWithDepartureName:(NSString *) fromName arrivalName:(NSString *) toName date:(NSDate *)date andDateType:(IRailDateType) dateType;
 
 @end

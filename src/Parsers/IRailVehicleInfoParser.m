@@ -31,25 +31,16 @@
 
 @implementation IRailVehicleInfoParser
 
-- (id)init {
-    self = [super init];
-    if (self) {
-    }
-    
-    return self;
-}
-
-- (id)finishedParsing {
-    
+- (id)finishedParsing {    
     return vehicle;
 }
 
 - (void)foundElement:(IRailParserNode *)element {
     
     if ([element.name isEqualToString:@"vehicle"]) {
-        vehicle = [[iRailModelGenerator generateVehicleForNode:element] retain];
+        vehicle = [[IRailModelGenerator generateVehicleForNode:element] retain];
     } else if ([element.name isEqualToString:@"stops"]) {
-        [iRailModelGenerator generateVehicleInformationForVehicle:vehicle withNode:element];
+        [IRailModelGenerator generateVehicleInformationForVehicle:vehicle withNode:element];
     }
     
 }

@@ -29,7 +29,7 @@
 
 #import <Foundation/Foundation.h>
 #import "IRailParserNode.h"
-#import "iRailModelGenerator.h"
+#import "IRailModelGenerator.h"
 
 
 @interface IRailAbstractParser : NSObject<NSXMLParserDelegate> {
@@ -41,12 +41,11 @@
 
 - (id)parseData:(NSData *)data;
 
-//private
+//protected
 //abstract methods
 - (void)startedParsing;
 - (void)errorOccured;
 - (id)finishedParsing;
-- (void)foundElementWithName:(NSString *)name attributes:(NSDictionary *)attributes andContent:(NSString *)content;
 
 - (void)foundElement:(IRailParserNode *)element;
 

@@ -27,40 +27,18 @@
  * or implied, of iRail vzw/asbl.
  */
 
-#import "IRailLiveboardParser.h"
+#import "IRailConnection.h"
 
 
-@implementation IRailLiveboardParser
+@implementation IRailConnection
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        departureList = [[NSMutableArray alloc] init];
-        liveboard = [[IRailLiveboard alloc] init];
-    }
-    return self;
-}
+@synthesize departure, arrival, transfers, duration, delay;
 
-- (id)finishedParsing {
+-(void)dealloc {
+    [departure release];
+    [arrival release];
+    [transfers release];
     
-    liveboard.departureList = [NSArray arrayWithArray:departureList];
-    return liveboard;
-    
-}
-
-- (void)foundElement:(IRailParserNode *)element {
-    
-    if ([element.name isEqualToString:@"station"]) {
-        liveboard.station = [IRailModelGenerator generateStationForNode:element];
-    } else if ([element.name isEqualToString:@"departure"]) {
-        [departureList addObject: [IRailModelGenerator generateArrivalDepartureForNode:element] ];
-    }
-    
-}
-
-- (void)dealloc {
-    [departureList release];
-    [liveboard release];
     [super dealloc];
 }
 
