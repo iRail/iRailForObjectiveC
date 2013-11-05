@@ -31,8 +31,8 @@
 #import "IRailAbstractParser.h"
 #import "IRailStation.h"
 
-@interface IRailStationListParser : IRailAbstractParser {
-    NSMutableArray      *stationList;
-}
+@interface IRailStationListParser : IRailAbstractParser
+
+@property (nonatomic, strong) NSMutableArray *stationList;
 
 @end

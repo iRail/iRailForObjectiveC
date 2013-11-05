@@ -31,12 +31,9 @@
 #import "IRailStation.h"
 #import "IRailArrivalDeparture.h"
 
-@interface IRailLiveboard : NSObject {
-    IRailStation    *station;
-    NSArray         *departureList;
-}
+@interface IRailLiveboard : NSObject
 
-@property(nonatomic, retain) IRailStation *station;
-@property(nonatomic, retain) NSArray *departureList;
+@property(nonatomic, strong) IRailStation *station;
+@property(nonatomic, strong) NSArray *departureList;
 
 @end

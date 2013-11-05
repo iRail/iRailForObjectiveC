@@ -35,28 +35,21 @@
 #import "IRailAPILiveboardCommand.h"
 #import "IRailAPIConnectionCommand.h"
 
-@interface IRailAPI(Private)
-- (NSURL *)generateUrlForPath:(NSString *)path andQueryParameters:(NSDictionary *)queryParameters;
-@end
-
 
 @implementation IRailAPI
 
-@synthesize delegate, providerUrl, lang;
-
 -(id) initWithDelegate:(id<IRailAPIDelegate>)aDelegate {
-    [self initWithDelegate:aDelegate language:@"en" andProviderURL:@"http://api.irail.be"];
-    return self;
+    
+    return [self initWithDelegate:aDelegate language:@"en" andProviderURL:@"http://api.irail.be"];
+
 }
 
 - (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate andLanguage:(NSString *)aLang {
     
-    [self initWithDelegate:aDelegate language:aLang andProviderURL:@"http://api.irail.be"];
-    
-    return self;
+    return [self initWithDelegate:aDelegate language:aLang andProviderURL:@"http://api.irail.be"];
 }
 
-- (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate language:(NSString *)aLang andProviderURL:(NSString *)aProvider {
+- (instancetype)initWithDelegate:(id<IRailAPIDelegate>)aDelegate language:(NSString *)aLang andProviderURL:(NSString *)aProvider {
     
     self = [super init];
     if(self) {
@@ -69,10 +62,10 @@
 }
 
 - (NSURL *)generateUrlForPath:(NSString *)path andQueryParameters:(NSDictionary *)queryParameters {
-    URLBuilder *urlBuilder = [[URLBuilder alloc] initWithBaseURL:providerUrl];
+    URLBuilder *urlBuilder = [[URLBuilder alloc] initWithBaseURL:self.providerUrl];
     
     [urlBuilder appendPath:path];
-    [urlBuilder appendField:@"lang" withValue:lang];
+    [urlBuilder appendField:@"lang" withValue:self.lang];
     
     if(queryParameters != nil) {
         for(NSString *key in queryParameters) {
@@ -81,46 +74,37 @@
         }
     }
     
-    NSURL *url = [urlBuilder getURL];
-    [urlBuilder release];
-    
-    return url;    
+    return [urlBuilder getURL];
 }
 
 - (void)callStationListCommand {
 
-    NSURL *url = [[self generateUrlForPath:@"stations/" andQueryParameters:nil] retain];
+    NSURL *url = [self generateUrlForPath:@"stations/" andQueryParameters:nil];
     
-    IRailAPIAbstractCommand *command = [[IRailAPIStationsCommand alloc] initWithAPIDelegate:delegate andCommandURL:url];
+    IRailAPIAbstractCommand *command = [[IRailAPIStationsCommand alloc] initWithAPIDelegate:self.delegate andCommandURL:url];
     [command execute];
     
-    [url release];    
 }
 
 - (void)callInfoForVehicleCommandWithId:(NSString *)vehicleId {
     
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:vehicleId forKey:@"id"];
-    NSURL *url = [[self generateUrlForPath:@"vehicle/" andQueryParameters:query] retain];
+    NSURL *url = [self generateUrlForPath:@"vehicle/" andQueryParameters:query];
     
-    IRailAPIAbstractCommand *command = [[IRailAPIVehicleInfoCommand alloc] initWithAPIDelegate:delegate andCommandURL:url];
+    IRailAPIAbstractCommand *command = [[IRailAPIVehicleInfoCommand alloc] initWithAPIDelegate:self.delegate andCommandURL:url];
     [command execute];
-    
-    [url release];
-    [query release];
+
 }
 
 - (void)callLiveboardCommandForStation:(NSString *)stationName {
     
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:stationName forKey:@"station"];
-    NSURL *url = [[self generateUrlForPath:@"liveboard/" andQueryParameters:query] retain];
+    NSURL *url = [self generateUrlForPath:@"liveboard/" andQueryParameters:query];
     
-    IRailAPIAbstractCommand *command = [[IRailAPILiveboardCommand alloc] initWithAPIDelegate:delegate andCommandURL:url];
+    IRailAPIAbstractCommand *command = [[IRailAPILiveboardCommand alloc] initWithAPIDelegate:self.delegate andCommandURL:url];
     [command execute];
-    
-    [url release];
-    [query release];
     
 }
 
@@ -130,13 +114,10 @@
     [query setValue:fromName forKey:@"from"];
     [query setValue:toName forKey:@"to"];
     
-    NSURL *url = [[self generateUrlForPath:@"connections/" andQueryParameters:query] retain];
+    NSURL *url = [self generateUrlForPath:@"connections/" andQueryParameters:query];
 
-    IRailAPIAbstractCommand *command = [[IRailAPIConnectionCommand alloc] initWithAPIDelegate:delegate andCommandURL:url];
+    IRailAPIAbstractCommand *command = [[IRailAPIConnectionCommand alloc] initWithAPIDelegate:self.delegate andCommandURL:url];
     [command execute];
-
-    [url release];
-    [query release];
 }
 
 - (void)callConnectionCommandWithDepartureName:(NSString *) fromName arrivalName:(NSString *) toName date:(NSDate *)date andDateType:(IRailDateType) dateType {
@@ -151,7 +132,6 @@
     
     [dateFormatter setDateFormat:@"hhmm"];
     [query setValue:[dateFormatter stringFromDate:date] forKey:@"time"];
-    [dateFormatter release];
     
     switch( dateType ) {
         case DATE_ARRIVAL:
@@ -162,13 +142,10 @@
             break;
     }
     
-    NSURL *url = [[self generateUrlForPath:@"connections/" andQueryParameters:query] retain];
+    NSURL *url = [self generateUrlForPath:@"connections/" andQueryParameters:query];
     
-    IRailAPIAbstractCommand *command = [[IRailAPIConnectionCommand alloc] initWithAPIDelegate:delegate andCommandURL:url];
+    IRailAPIAbstractCommand *command = [[IRailAPIConnectionCommand alloc] initWithAPIDelegate:self.delegate andCommandURL:url];
     [command execute];
-    
-    [url release];
-    [query release];
 }
     
 @end

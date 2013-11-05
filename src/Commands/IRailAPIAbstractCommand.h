@@ -31,13 +31,12 @@
 #import "IRailAPIDelegate.h"
 #import "IRailAbstractParser.h"
 
-@interface IRailAPIAbstractCommand : NSObject {
-    NSMutableData           *apiResponseData;
-    
-    NSURL                   *commandURL;
-    id<IRailAPIDelegate>    delegate;
-    IRailAbstractParser     *parser;
-}
+@interface IRailAPIAbstractCommand : NSObject
+
+@property (nonatomic, strong) NSMutableData *apiResponseData;
+@property (nonatomic, strong) NSURL *commandURL;
+@property (nonatomic, weak) id<IRailAPIDelegate> delegate;
+@property (nonatomic, strong) IRailAbstractParser *parser;
 
 - (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl;
 - (void)execute;

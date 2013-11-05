@@ -38,9 +38,7 @@
 #import "IRailArrivalDeparture.h"
 #import "IRailLiveboard.h"
 
-@interface IRailModelGenerator : NSObject {
-    
-}
+@interface IRailModelGenerator : NSObject
 
 + (IRailStation *)generateStationForNode:(IRailParserNode *)node;
 + (IRailVehicle *)generateVehicleForNode:(IRailParserNode *)node;

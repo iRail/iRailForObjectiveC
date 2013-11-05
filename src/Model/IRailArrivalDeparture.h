@@ -29,13 +29,7 @@
 #import <Foundation/Foundation.h>
 #import "IRailStation.h"
 
-@interface IRailArrivalDeparture : NSObject {
-    IRailStation    *station;
-    NSString        *vehicleId;
-    NSDate          *time;
-    int             delay;
-    int             platform;
-}
+@interface IRailArrivalDeparture : NSObject
 
 @property(nonatomic, retain) IRailStation *station;
 @property(nonatomic, retain) NSString *vehicleId;

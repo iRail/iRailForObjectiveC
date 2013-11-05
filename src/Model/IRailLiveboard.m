@@ -32,13 +32,4 @@
 
 @implementation IRailLiveboard
 
-@synthesize station, departureList;
-
-- (void)dealloc {
-    [station release];
-    [departureList release];
-    
-    [super dealloc];
-}
-
 @end

@@ -34,8 +34,8 @@
 - (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl {
     self = [super init];
     if (self) {
-        self->delegate = [aDelegate retain];
-        self->commandURL = [aUrl retain];
+        _delegate = aDelegate;
+        _commandURL = aUrl;
     }
     
     return self;
@@ -43,53 +43,40 @@
 
 - (void)execute {
     
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:commandURL];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:self.commandURL];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
     if (connection) {
-        apiResponseData = [[NSMutableData alloc] init];
+        self.apiResponseData = [[NSMutableData alloc] init];
     }
     
-    [request release];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [delegate iRailApiCommandDidFailWithError:error];
-    [self release];
+    [self.delegate iRailApiCommandDidFailWithError:error];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [apiResponseData appendData:data];
+    [self.apiResponseData appendData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    id result = [[parser parseData:apiResponseData] retain];
-    
-    if( !result ) {
-        //TODO: Proper NSError object...
-        [delegate iRailApiCommandDidFailWithError:nil];
-    } else {
-        [self finishWithResult:result];
+    @autoreleasepool {
+        id result = [self.parser parseData:self.apiResponseData];
+        
+        if( !result ) {
+            //TODO: Proper NSError object...
+            [self.delegate iRailApiCommandDidFailWithError:nil];
+        } else {
+            [self finishWithResult:result];
+        }
     }
-
-    [result release];
-    [apiResponseData release];
     
-    [pool release];
-    [self release];
 }
 
 - (void)finishWithResult:(id)result {
     //ABSTRACT METHOD
     //implement with correct delegate call...
-}
-
-- (void)dealloc {
-    [delegate release];
-    [parser release];
-    [commandURL release];
-    [super dealloc];
 }
 
 @end

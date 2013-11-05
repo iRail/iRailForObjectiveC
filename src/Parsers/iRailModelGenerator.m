@@ -35,7 +35,7 @@
 + (IRailStation *)generateStationForNode:(IRailParserNode *)node {
     if ( ![node.name isEqualToString:@"station"] && ![node.name isEqualToString:@"direction"] ) return nil;
     
-    IRailStation *station = [[[IRailStation alloc] init] autorelease];
+    IRailStation *station = [[IRailStation alloc] init];
     station.name = node.content;
     station.xCoord = [[node.attributes objectForKey:@"locationX"] doubleValue];
     station.yCoord = [[node.attributes objectForKey:@"locationY"] doubleValue];
@@ -49,7 +49,7 @@
     IRailVehicle *vehicle = [[IRailVehicle alloc] init];
     vehicle.vid = node.content;
     
-    return [vehicle autorelease];
+    return vehicle;
 }
 
 + (IRailVehicle *)generateVehicleInformationForVehicle:(IRailVehicle *) vehicle withNode:(IRailParserNode *)node {
@@ -70,15 +70,13 @@
                 } else if ([curnode2.name isEqualToString:@"time"]) {
                     NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970: [curnode2.content longLongValue]];
                     stop.time = date;
-                    [date release];
                 }
             }
             [stops addObject:stop];
-            [stop release];
+
         }
         
         vehicle.stops = [NSArray arrayWithArray:stops];
-        [stops release];
     }
     
     return vehicle;
@@ -87,7 +85,7 @@
 + (IRailArrivalDeparture *)generateArrivalDepartureForNode:(IRailParserNode *)node {
     if ( ![node.name isEqualToString:@"departure"] && ![node.name isEqualToString:@"arrival"] ) return nil;
     
-    IRailArrivalDeparture *arrivalDeparture = [[[IRailArrivalDeparture alloc] init] autorelease];
+    IRailArrivalDeparture *arrivalDeparture = [[IRailArrivalDeparture alloc] init];
     for (int i = 0; i < [node.children count]; i++) {
         IRailParserNode *curnode = [node.children objectAtIndex:i];
         
@@ -98,7 +96,6 @@
         } else if ( [curnode.name isEqualToString:@"time"] ) {
             NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970: [curnode.content longLongValue]];
             arrivalDeparture.time = date;
-            [date release];
         } else if ( [curnode.name isEqualToString:@"platform"] ) {
             arrivalDeparture.platform = [curnode.content intValue];
         }
@@ -134,14 +131,9 @@
         }
         
         [array addObject:transfer];
-        [transfer release];
-        
     }
     
-    NSArray *transfers = [NSArray arrayWithArray:array];
-    [array release];
-    
-    return transfers;
+    return [NSArray arrayWithArray:array];
 }
 
 @end

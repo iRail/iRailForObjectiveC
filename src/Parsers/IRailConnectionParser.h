@@ -32,9 +32,9 @@
 
 #import "IRailConnection.h"
 
-@interface IRailConnectionParser : IRailAbstractParser {
-    IRailConnection *connection;
-    NSMutableArray *connections;
-}
+@interface IRailConnectionParser : IRailAbstractParser
+
+@property (nonatomic, strong) IRailConnection *connection;
+@property (nonatomic, strong) NSMutableArray *connections;
 
 @end

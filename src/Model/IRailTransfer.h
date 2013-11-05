@@ -32,12 +32,7 @@
 #import "IRailStation.h"
 #import "IRailVehicle.h"
 
-@interface IRailTransfer : NSObject {
-    IRailArrivalDeparture       *departure, *arrival;
-    IRailStation                *station, *trainDirection;
-    IRailVehicle                *vehicle;
-    int                         timeBetween;
-}
+@interface IRailTransfer : NSObject
 
 @property(nonatomic, retain) IRailArrivalDeparture *departure;
 @property(nonatomic, retain) IRailArrivalDeparture *arrival;

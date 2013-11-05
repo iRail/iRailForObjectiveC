@@ -29,12 +29,20 @@
 
 #import "IRailAbstractParser.h"
 
+@interface IRailAbstractParser ()
+
+@property (nonatomic, strong) NSMutableArray *nodeStack;
+@property (nonatomic, strong) NSMutableString *currentContent;
+@property (nonatomic, assign) BOOL error;
+
+@end
+
 @implementation IRailAbstractParser
 
 - (id)init {
     self = [super init];
     if (self) {
-        error = NO;
+        _error = NO;
     }
     
     return self;
@@ -47,9 +55,8 @@
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
     [parser setDelegate:self];
     [parser parse];
-    [parser release];
     
-    if(!error) {
+    if(!self.error) {
         return [self finishedParsing];
     }
     return nil;
@@ -58,7 +65,7 @@
 
 
 - (void)parserDidStartDocument:(NSXMLParser *)parser {
-    nodeStack = [[NSMutableArray alloc] init];
+    self.nodeStack = [[NSMutableArray alloc] init];
     [self startedParsing];
 }
 
@@ -68,61 +75,52 @@
     node.name = elementName;
     node.attributes = attributeDict;
     
-    if ([nodeStack count] > 0) {
-        IRailParserNode *lastNode = [nodeStack lastObject];
+    if ([self.nodeStack count] > 0) {
+        IRailParserNode *lastNode = [self.nodeStack lastObject];
         
         [lastNode.children addObject:node];
         node.parent = lastNode;
     }
     
-    [nodeStack addObject:node];
-    [node release];
+    [self.nodeStack addObject:node];
     
 }
 
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
-    if(!currentContent) {
-        currentContent = [NSMutableString new];
+    if(!self.currentContent) {
+        self.currentContent = [NSMutableString new];
     }
     
-    [currentContent appendString:string];
+    [self.currentContent appendString:string];
 }
 
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
 
-    IRailParserNode *node = [nodeStack lastObject];
+    IRailParserNode *node = [self.nodeStack lastObject];
     
     NSString *contentString = nil;
     
-    if(currentContent)contentString = [[NSString alloc] initWithString:currentContent];
+    if(self.currentContent)contentString = [[NSString alloc] initWithString:self.currentContent];
     node.content = contentString;
     
-    [contentString release];
-    [currentContent release];
-    currentContent = nil;
+
+    self.currentContent = nil;
     
     if ([node.name isEqualToString:@"error"]) {
         //do error stuff...
     } else {
-        [self foundElement:[nodeStack lastObject]];
+        [self foundElement:[self.nodeStack lastObject]];
     }
     
-    [nodeStack removeLastObject];    
+    [self.nodeStack removeLastObject];
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
 }
 
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
-    error = YES;
+    self.error = YES;
     [self errorOccured];
-}
-
-- (void)dealloc {
-    [nodeStack release];
-    if(currentContent)[currentContent release];
-    
-    [super dealloc];
 }
 
 

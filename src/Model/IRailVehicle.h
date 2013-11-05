@@ -30,14 +30,11 @@
 #import <Foundation/Foundation.h>
 #import "IRailVehicleStop.h"
 
-@interface IRailVehicle : NSObject {
-    NSString    *vid;
-    NSArray     *stops;
-}
+@interface IRailVehicle : NSObject
 
-@property(nonatomic, retain) NSString *vid;
-@property(nonatomic, retain) NSArray *stops;
+@property(nonatomic, strong) NSString *vid;
+@property(nonatomic, strong) NSArray *stops;
 
-- (id) initWithVehicleId:(NSString *)aVid andStopList:(NSArray *)aStopList;
+- (instancetype)initWithVehicleId:(NSString *)aVid andStopList:(NSArray *)aStopList;
 
 @end

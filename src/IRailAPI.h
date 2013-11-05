@@ -35,15 +35,11 @@
 #import "IRailLiveboard.h"
 #import "IRailConnection.h"
 
-@interface IRailAPI : NSObject {
-    id<IRailAPIDelegate> delegate;
-    NSString *providerUrl;
-    NSString *lang;
-}
+@interface IRailAPI : NSObject
 
-@property(nonatomic, retain) id<IRailAPIDelegate> delegate;
-@property(nonatomic, retain) NSString* lang;
-@property(nonatomic, retain) NSString* providerUrl;
+@property(nonatomic, weak) id<IRailAPIDelegate> delegate;
+@property(nonatomic, strong) NSString* lang;
+@property(nonatomic, strong) NSString* providerUrl;
 
 - (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate;
 - (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate andLanguage:(NSString *)aLang;

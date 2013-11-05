@@ -30,11 +30,11 @@
 #import <Foundation/Foundation.h>
 
 
-@interface URLBuilder : NSObject {
-    NSString *baseURL;
-    NSMutableString *path;
-    NSMutableString *query;
-}
+@interface URLBuilder : NSObject
+
+@property (nonatomic, strong) NSString *baseURL;
+@property (nonatomic, strong) NSMutableString *path;
+@property (nonatomic, strong) NSMutableString *query;
 
 - (id)initWithBaseURL:(NSString *)aUrl;
 - (void)appendPath:(NSString *)path;

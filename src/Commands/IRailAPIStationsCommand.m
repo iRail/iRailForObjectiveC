@@ -34,14 +34,14 @@
 - (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl {
     self = [super initWithAPIDelegate:aDelegate andCommandURL:aUrl];
     if (self) {
-        self->parser = [[IRailStationListParser alloc] init];
+        self.parser = [[IRailStationListParser alloc] init];
     }
     return self;
 }
 
 - (void)finishWithResult:(id)result {    
-    if([delegate respondsToSelector:@selector(iRailApiCommandDidFinishReceivingStationList:)]) {
-        [delegate iRailApiCommandDidFinishReceivingStationList:result];
+    if([self.delegate respondsToSelector:@selector(iRailApiCommandDidFinishReceivingStationList:)]) {
+        [self.delegate iRailApiCommandDidFinishReceivingStationList:result];
     }
 }
 

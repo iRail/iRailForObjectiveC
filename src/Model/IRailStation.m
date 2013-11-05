@@ -32,13 +32,4 @@
 
 @implementation IRailStation
 
-@synthesize sid, name, xCoord, yCoord;
-
-- (void)dealloc {
-    [sid release];
-    [name release];
-    
-    [super dealloc];
-}
-
 @end

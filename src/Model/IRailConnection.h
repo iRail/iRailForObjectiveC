@@ -36,13 +36,7 @@ typedef enum DATE_TYPE {
     DATE_DEPARTURE
 }IRailDateType;
 
-@interface IRailConnection : NSObject {
-    IRailArrivalDeparture   *departure, *arrival;
-    NSArray                 *transfers;
-    int                     duration;
-    bool                    delay;
-    
-}
+@interface IRailConnection : NSObject
 
 @property(nonatomic, retain) IRailArrivalDeparture *departure;
 @property(nonatomic, retain) IRailArrivalDeparture *arrival;

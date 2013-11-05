@@ -36,15 +36,15 @@
     self = [super initWithAPIDelegate:aDelegate andCommandURL:aUrl];
     
     if (self) {
-        self->parser = [[IRailLiveboardParser alloc] init];
+        self.parser = [[IRailLiveboardParser alloc] init];
     }
     
     return self;
 }
 
 - (void)finishWithResult:(id)result {
-    if ([delegate respondsToSelector:@selector(iRailapiCommandDidFinishReceivingLiveboard:)]) {
-        [delegate iRailapiCommandDidFinishReceivingLiveboard:result];
+    if ([self.delegate respondsToSelector:@selector(iRailapiCommandDidFinishReceivingLiveboard:)]) {
+        [self.delegate iRailapiCommandDidFinishReceivingLiveboard:result];
     }
 }
 

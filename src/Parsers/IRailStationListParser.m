@@ -35,24 +35,19 @@
 - (id)init {
     self = [super init];
     if (self) {
-        stationList = [[NSMutableArray alloc] init];
+        _stationList = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (id)finishedParsing {
-    return [NSArray arrayWithArray:stationList];
+    return [NSArray arrayWithArray:self.stationList];
 }
 
 - (void)foundElement:(IRailParserNode *)element {
     if ([element.name isEqualToString:@"station"]) {
-        [stationList addObject: [IRailModelGenerator generateStationForNode:element]];
+        [self.stationList addObject: [IRailModelGenerator generateStationForNode:element]];
     }
-}
-
-- (void)dealloc {
-    [stationList release];
-    [super dealloc];
 }
 
 @end

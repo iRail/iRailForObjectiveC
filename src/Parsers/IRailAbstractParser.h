@@ -32,12 +32,7 @@
 #import "IRailModelGenerator.h"
 
 
-@interface IRailAbstractParser : NSObject<NSXMLParserDelegate> {
-    @private
-    NSMutableArray      *nodeStack;
-    NSMutableString     *currentContent;
-    bool                error;
-}
+@interface IRailAbstractParser : NSObject<NSXMLParserDelegate>
 
 - (id)parseData:(NSData *)data;
 
