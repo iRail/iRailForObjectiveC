@@ -28,28 +28,28 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "IRailAPIDelegate.h"
-
-#import "IRailStation.h"
-#import "IRailVehicle.h"
-#import "IRailLiveboard.h"
 #import "IRailConnection.h"
+
+@class IRailVehicle;
+@class IRailLiveboard;
+@class IRailStation;
+
+typedef void(^StationListCompletion)(NSArray *stationList, NSError *error);
+typedef void(^VehicleInfoCompletion)(IRailVehicle *vehicle, NSError *error);
+typedef void(^LiveBoardCompletion)(IRailLiveboard *liveboard, NSError *error);
+typedef void(^ConnectionsCompletion)(NSArray *connections, NSError *error);
 
 @interface IRailAPI : NSObject
 
-@property(nonatomic, weak) id<IRailAPIDelegate> delegate;
-@property(nonatomic, strong) NSString* lang;
-@property(nonatomic, strong) NSString* providerUrl;
++ (IRailAPI *)shared;
 
-- (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate;
-- (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate andLanguage:(NSString *)aLang;
-- (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate language:(NSString *)aLang andProviderURL:(NSString *)aProvider;
+@property(nonatomic, strong) NSString* lang; // default: @"en"
+@property(nonatomic, strong) NSString* providerUrl; // default: @"http://api.irail.be"
 
-- (void)callStationListCommand;
-- (void)callInfoForVehicleCommandWithId:(NSString *)vehicleId;
-- (void)callLiveboardCommandForStation:(NSString *)stationName;
-
-- (void)callConnectionCommandWithDepartureName:(NSString *) fromName andArrivalName:(NSString *) toName;
-- (void)callConnectionCommandWithDepartureName:(NSString *) fromName arrivalName:(NSString *) toName date:(NSDate *)date andDateType:(IRailDateType) dateType;
+- (void)callStationListWithCompletion:(StationListCompletion)completion;
+- (void)callInfoForVehicle:(NSString *)vehicleId withCompletion:(VehicleInfoCompletion)completion;
+- (void)callLiveboardCommandForStation:(NSString *)station withCompletion:(LiveBoardCompletion)completion;
+- (void)callConnectionCommandWithDepartureName:(NSString *) fromName andArrivalName:(NSString *) toName completion:(ConnectionsCompletion)completion;
+- (void)callConnectionCommandWithDepartureName:(NSString *) fromName arrivalName:(NSString *) toName date:(NSDate *)date andDateType:(IRailDateType) dateType completion:(ConnectionsCompletion)completion;
 
 @end
