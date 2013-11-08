@@ -31,13 +31,12 @@
 
 @implementation IRailAPIAbstractCommand
 
-- (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl {
+- (instancetype)initWithCommandURL:(NSURL *)url completion:(GeneralCompletion)completion {
     self = [super init];
     if (self) {
-        _delegate = aDelegate;
-        _commandURL = aUrl;
+        self.completion = completion;
+        self.commandURL = url;
     }
-    
     return self;
 }
 
@@ -52,7 +51,7 @@
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [self.delegate iRailApiCommandDidFailWithError:error];
+    [self callCompletionWithResult:nil error:error];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -61,22 +60,36 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     
+    IRailAbstractParser *parser = [[[[self class] parserClass] alloc] init];
+    
+    if (![parser isKindOfClass:[IRailAbstractParser class]]) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:[NSString stringWithFormat:@"Provided parserClass \"%@\" must be a sublass of IRailAbstractParser", NSStringFromClass([parser class])]
+                                     userInfo:nil];
+    }
+
     @autoreleasepool {
-        id result = [self.parser parseData:self.apiResponseData];
+        id result = [parser parseData:self.apiResponseData];
         
         if( !result ) {
-            //TODO: Proper NSError object...
-            [self.delegate iRailApiCommandDidFailWithError:nil];
+            self.completion(nil,[NSError errorWithDomain:@"iRail" code:1 userInfo:nil]);
         } else {
-            [self finishWithResult:result];
+            [self callCompletionWithResult:result error:nil];
         }
     }
     
 }
 
-- (void)finishWithResult:(id)result {
-    //ABSTRACT METHOD
-    //implement with correct delegate call...
++ (Class)parserClass {
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 userInfo:nil];
+}
+
+- (void)callCompletionWithResult:(id) result error:(NSError *)error {
+    if (self.completion) {
+        self.completion(result,error);
+    }
 }
 
 @end

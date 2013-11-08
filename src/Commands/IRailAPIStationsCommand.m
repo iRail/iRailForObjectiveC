@@ -31,18 +31,8 @@
 
 @implementation IRailAPIStationsCommand
 
-- (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl {
-    self = [super initWithAPIDelegate:aDelegate andCommandURL:aUrl];
-    if (self) {
-        self.parser = [[IRailStationListParser alloc] init];
-    }
-    return self;
-}
-
-- (void)finishWithResult:(id)result {    
-    if([self.delegate respondsToSelector:@selector(iRailApiCommandDidFinishReceivingStationList:)]) {
-        [self.delegate iRailApiCommandDidFinishReceivingStationList:result];
-    }
++ (Class)parserClass {
+    return [IRailStationListParser class];
 }
 
 @end

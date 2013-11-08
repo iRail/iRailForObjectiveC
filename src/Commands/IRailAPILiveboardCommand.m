@@ -32,20 +32,8 @@
 
 @implementation IRailAPILiveboardCommand
 
-- (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl {
-    self = [super initWithAPIDelegate:aDelegate andCommandURL:aUrl];
-    
-    if (self) {
-        self.parser = [[IRailLiveboardParser alloc] init];
-    }
-    
-    return self;
-}
-
-- (void)finishWithResult:(id)result {
-    if ([self.delegate respondsToSelector:@selector(iRailapiCommandDidFinishReceivingLiveboard:)]) {
-        [self.delegate iRailapiCommandDidFinishReceivingLiveboard:result];
-    }
+- (Class)parserClass {
+    return [IRailLiveboardParser class];
 }
 
 @end
