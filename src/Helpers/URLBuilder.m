@@ -68,7 +68,14 @@
     if([self.baseURL characterAtIndex:[self.baseURL length]-1] != '/') [newURL appendString:@"/"];
     [newURL appendString:self.path];
     [newURL appendString:@"?"];
-    [newURL appendString:self.query];
+    
+    NSString *escapedQuery = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
+                                                                                                    NULL,
+                                                                                                    (__bridge CFStringRef) self.query,
+                                                                                                    NULL,
+                                                                                                    CFSTR("'\" "),
+                                                                                                    kCFStringEncodingUTF8));
+    [newURL appendString:escapedQuery];
     
     return [NSURL URLWithString:newURL];
 }
