@@ -35,37 +35,13 @@
 #import "IRailAPILiveboardCommand.h"
 #import "IRailAPIConnectionCommand.h"
 
-
 @implementation IRailAPI
 
-+ (IRailAPI *)shared
-{
-    //  Static local predicate must be initialized to 0
-    static IRailAPI *shared = nil;
-    static dispatch_once_t onceToken = 0;
-    dispatch_once(&onceToken, ^{
-        shared = [[IRailAPI alloc] initWithLanguage:@"en" andProviderURL:@"http://api.irail.be"];
-    });
-    return shared;
-}
-
-
-- (instancetype)initWithLanguage:(NSString *)aLang andProviderURL:(NSString *)aProvider {
-    
-    self = [super init];
-    if(self) {
-        [self setProviderUrl:aProvider];
-        [self setLang:aLang];
-    }
-    
-    return self;
-}
-
-- (NSURL *)generateUrlForPath:(NSString *)path andQueryParameters:(NSDictionary *)queryParameters {
-    URLBuilder *urlBuilder = [[URLBuilder alloc] initWithBaseURL:self.providerUrl];
++ (NSURL *)generateUrlForPath:(NSString *)path andQueryParameters:(NSDictionary *)queryParameters {
+    URLBuilder *urlBuilder = [[URLBuilder alloc] initWithBaseURL:[[IRailAPISettings sharedSettings] baseUrl]];
     
     [urlBuilder appendPath:path];
-    [urlBuilder appendField:@"lang" withValue:self.lang];
+    [urlBuilder appendField:@"lang" withValue:[[IRailAPISettings sharedSettings] language]];
     
     if(queryParameters != nil) {
         for(NSString *key in queryParameters) {
@@ -77,14 +53,14 @@
     return [urlBuilder getURL];
 }
 
-- (void)callStationListWithCompletion:(StationListCompletion)completion {
++ (void)callStationListWithCompletion:(StationListCompletion)completion {
     
     NSURL *url = [self generateUrlForPath:@"stations/" andQueryParameters:nil];
     IRailAPIAbstractCommand *command = [[IRailAPIStationsCommand alloc] initWithCommandURL:url completion:completion];
     [command execute];
 }
 
-- (void)callInfoForVehicle:(NSString *)vehicleId withCompletion:(VehicleInfoCompletion)completion {
++ (void)callInfoForVehicle:(NSString *)vehicleId withCompletion:(VehicleInfoCompletion)completion {
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:vehicleId forKey:@"id"];
     NSURL *url = [self generateUrlForPath:@"vehicle/" andQueryParameters:query];
@@ -94,7 +70,7 @@
     
 }
 
-- (void)callLiveboardCommandForStation:(NSString *)station withCompletion:(LiveBoardCompletion)completion {
++ (void)callLiveboardCommandForStation:(NSString *)station withCompletion:(LiveBoardCompletion)completion {
 
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:station forKey:@"station"];
@@ -105,7 +81,7 @@
 
 }
 
-- (void)callConnectionCommandWithDepartureName:(NSString *)fromName arrivalName:(NSString *)toName date:(NSDate *)date andDateType:(IRailDateType)dateType completion:(ConnectionsCompletion)completion {
++ (void)callConnectionCommandWithDepartureName:(NSString *)fromName arrivalName:(NSString *)toName date:(NSDate *)date andDateType:(IRailDateType)dateType completion:(ConnectionsCompletion)completion {
     
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:fromName forKey:@"from"];
@@ -133,7 +109,7 @@
     [command execute];
 }
 
-- (void)callConnectionCommandWithDepartureName:(NSString *)fromName andArrivalName:(NSString *)toName completion:(ConnectionsCompletion)completion {
++ (void)callConnectionCommandWithDepartureName:(NSString *)fromName andArrivalName:(NSString *)toName completion:(ConnectionsCompletion)completion {
     
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:fromName forKey:@"from"];
@@ -143,6 +119,24 @@
     
     IRailAPIAbstractCommand *command = [[IRailAPIConnectionCommand alloc] initWithCommandURL:url completion:completion];
     [command execute];
+}
+
+@end
+
+
+@implementation IRailAPISettings
+
++ (IRailAPISettings *)sharedSettings
+{
+    //  Static local predicate must be initialized to 0
+    static IRailAPISettings *sharedSettings = nil;
+    static dispatch_once_t onceToken = 0;
+    dispatch_once(&onceToken, ^{
+        sharedSettings = [[IRailAPISettings alloc] init];
+        sharedSettings.language = @"en";
+        sharedSettings.baseUrl = @"http://api.irail.be";
+    });
+    return sharedSettings;
 }
 
 @end

@@ -41,15 +41,22 @@ typedef void(^ConnectionsCompletion)(NSArray *connections, NSError *error);
 
 @interface IRailAPI : NSObject
 
-+ (IRailAPI *)shared;
++ (void)callStationListWithCompletion:(StationListCompletion)completion;
++ (void)callInfoForVehicle:(NSString *)vehicleId withCompletion:(VehicleInfoCompletion)completion;
++ (void)callLiveboardCommandForStation:(NSString *)station withCompletion:(LiveBoardCompletion)completion;
++ (void)callConnectionCommandWithDepartureName:(NSString *) fromName andArrivalName:(NSString *) toName completion:(ConnectionsCompletion)completion;
++ (void)callConnectionCommandWithDepartureName:(NSString *) fromName arrivalName:(NSString *) toName date:(NSDate *)date andDateType:(IRailDateType) dateType completion:(ConnectionsCompletion)completion;
 
-@property(nonatomic, strong) NSString* lang; // default: @"en"
-@property(nonatomic, strong) NSString* providerUrl; // default: @"http://api.irail.be"
+@end
 
-- (void)callStationListWithCompletion:(StationListCompletion)completion;
-- (void)callInfoForVehicle:(NSString *)vehicleId withCompletion:(VehicleInfoCompletion)completion;
-- (void)callLiveboardCommandForStation:(NSString *)station withCompletion:(LiveBoardCompletion)completion;
-- (void)callConnectionCommandWithDepartureName:(NSString *) fromName andArrivalName:(NSString *) toName completion:(ConnectionsCompletion)completion;
-- (void)callConnectionCommandWithDepartureName:(NSString *) fromName arrivalName:(NSString *) toName date:(NSDate *)date andDateType:(IRailDateType) dateType completion:(ConnectionsCompletion)completion;
+/**
+ *  Separate object for settings
+ */
+@interface IRailAPISettings : NSObject
+
++ (IRailAPISettings *)sharedSettings;
+
+@property(nonatomic, strong) NSString* language; // default: @"en"
+@property(nonatomic, strong) NSString* baseUrl; // default: @"http://api.irail.be"
 
 @end
