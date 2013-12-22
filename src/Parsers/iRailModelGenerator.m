@@ -117,7 +117,7 @@
             
             if ([curnode2.name isEqualToString:@"arrival"]) {
                 transfer.arrival = [IRailModelGenerator generateArrivalDepartureForNode:curnode2];
-            } else if ([curnode2.name isEqualToString:@"depart"]) {
+            } else if ([curnode2.name isEqualToString:@"departure"]) {
                 transfer.departure = [IRailModelGenerator generateArrivalDepartureForNode:curnode2];
             } else if ([curnode2.name isEqualToString:@"timeBetween"]) {
                 transfer.timeBetween = [curnode2.content intValue];
