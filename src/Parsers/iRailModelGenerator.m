@@ -97,7 +97,7 @@
             NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970: [curnode.content longLongValue]];
             arrivalDeparture.time = date;
         } else if ( [curnode.name isEqualToString:@"platform"] ) {
-            arrivalDeparture.platform = [curnode.content intValue];
+            arrivalDeparture.platform = curnode.content;
         }
     }
     
