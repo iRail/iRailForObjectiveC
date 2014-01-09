@@ -28,32 +28,35 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "IRailAPIDelegate.h"
-
-#import "IRailStation.h"
-#import "IRailVehicle.h"
-#import "IRailLiveboard.h"
 #import "IRailConnection.h"
 
-@interface IRailAPI : NSObject {
-    id<IRailAPIDelegate> delegate;
-    NSString *providerUrl;
-    NSString *lang;
-}
+@class IRailVehicle;
+@class IRailLiveboard;
+@class IRailStation;
 
-@property(nonatomic, retain) id<IRailAPIDelegate> delegate;
-@property(nonatomic, retain) NSString* lang;
-@property(nonatomic, retain) NSString* providerUrl;
+typedef void(^StationListCompletion)(NSArray *stationList, NSError *error);
+typedef void(^VehicleInfoCompletion)(IRailVehicle *vehicle, NSError *error);
+typedef void(^LiveBoardCompletion)(IRailLiveboard *liveboard, NSError *error);
+typedef void(^ConnectionsCompletion)(NSArray *connections, NSError *error);
 
-- (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate;
-- (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate andLanguage:(NSString *)aLang;
-- (id)initWithDelegate:(id<IRailAPIDelegate>)aDelegate language:(NSString *)aLang andProviderURL:(NSString *)aProvider;
+@interface IRailAPI : NSObject
 
-- (void)callStationListCommand;
-- (void)callInfoForVehicleCommandWithId:(NSString *)vehicleId;
-- (void)callLiveboardCommandForStation:(NSString *)stationName;
++ (void)callStationListWithCompletion:(StationListCompletion)completion;
++ (void)callInfoForVehicle:(NSString *)vehicleId withCompletion:(VehicleInfoCompletion)completion;
++ (void)callLiveboardCommandForStation:(NSString *)station withCompletion:(LiveBoardCompletion)completion;
++ (void)callConnectionCommandWithDepartureName:(NSString *) fromName andArrivalName:(NSString *) toName completion:(ConnectionsCompletion)completion;
++ (void)callConnectionCommandWithDepartureName:(NSString *) fromName arrivalName:(NSString *) toName date:(NSDate *)date andDateType:(IRailDateType) dateType completion:(ConnectionsCompletion)completion;
 
-- (void)callConnectionCommandWithDepartureName:(NSString *) fromName andArrivalName:(NSString *) toName;
-- (void)callConnectionCommandWithDepartureName:(NSString *) fromName arrivalName:(NSString *) toName date:(NSDate *)date andDateType:(IRailDateType) dateType;
+@end
+
+/**
+ *  Separate object for settings
+ */
+@interface IRailAPISettings : NSObject
+
++ (IRailAPISettings *)sharedSettings;
+
+@property(nonatomic, strong) NSString* language; // default: @"en"
+@property(nonatomic, strong) NSString* baseUrl; // default: @"http://api.irail.be"
 
 @end

@@ -32,22 +32,17 @@
 @implementation IRailVehicleInfoParser
 
 - (id)finishedParsing {    
-    return vehicle;
+    return self.vehicle;
 }
 
 - (void)foundElement:(IRailParserNode *)element {
     
     if ([element.name isEqualToString:@"vehicle"]) {
-        vehicle = [[IRailModelGenerator generateVehicleForNode:element] retain];
+        self.vehicle = [IRailModelGenerator generateVehicleForNode:element];
     } else if ([element.name isEqualToString:@"stops"]) {
-        [IRailModelGenerator generateVehicleInformationForVehicle:vehicle withNode:element];
+        [IRailModelGenerator generateVehicleInformationForVehicle:self.vehicle withNode:element];
     }
     
-}
-
-- (void)dealloc {
-    [vehicle release];
-    [super dealloc];
 }
 
 @end

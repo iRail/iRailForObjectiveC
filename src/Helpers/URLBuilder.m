@@ -35,56 +35,49 @@
 - (id)initWithBaseURL:(NSString *)aUrl {
     self = [super init];
     if (self) {
-        self->baseURL = aUrl;
-        self->path = [[NSMutableString alloc] init];
-        self->query = [[NSMutableString alloc] init];
+        _baseURL = aUrl;
+        _path = [[NSMutableString alloc] init];
+        _query = [[NSMutableString alloc] init];
     }
     
     return self;
 }
 
 - (void)appendPath:(NSString *)aPath {
-    if([path length] > 0 && [path characterAtIndex:[path length]-1] != '/') [path appendString:@"/"];
-    [path appendString:aPath];
+    if([self.path length] > 0 && [self.path characterAtIndex:[self.path length]-1] != '/') [self.path appendString:@"/"];
+    [self.path appendString:aPath];
 }
 
 - (void)appendField:(NSString *)field withValue:(NSString *)value {
-    if([query length] > 0) [query appendString:@"&"];
+    if([self.query length] > 0) [self.query appendString:@"&"];
     
-    [query appendString:field];
-    [query appendString:@"="];
-    [query appendString:value];
+    [self.query appendString:field];
+    [self.query appendString:@"="];
+    [self.query appendString:value];
 }
 
 - (void)reset {
-    [query release];
-    self->query = [[NSMutableString alloc] init];
-    
-    [path release];
-    self->path = [[NSMutableString alloc] init];
+    self.query = [[NSMutableString alloc] init];
+    self.path = [[NSMutableString alloc] init];
 }
 
 - (NSURL *)getURL {
     
-    NSMutableString *newURL = [[NSMutableString alloc] initWithString:baseURL];
+    NSMutableString *newURL = [[NSMutableString alloc] initWithString:self.baseURL];
     
-    if([baseURL characterAtIndex: [baseURL length]-1] != '/') [newURL appendString:@"/"];
-    [newURL appendString:path];
+    if([self.baseURL characterAtIndex:[self.baseURL length]-1] != '/') [newURL appendString:@"/"];
+    [newURL appendString:self.path];
     [newURL appendString:@"?"];
-    [newURL appendString:query];
     
-    NSURL *theURL = [NSURL URLWithString:newURL];
-    [newURL release];
+    NSString *escapedQuery = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
+                                                                                                    NULL,
+                                                                                                    (__bridge CFStringRef) self.query,
+                                                                                                    NULL,
+                                                                                                    CFSTR("'\" "),
+                                                                                                    kCFStringEncodingUTF8));
+    [newURL appendString:escapedQuery];
     
-    return theURL;
-}
-
-- (void)dealloc {
-    [baseURL release];
-    [path release];
-    [query release];
-    
-    [super dealloc];
+    return [NSURL URLWithString:newURL];
 }
 
 @end

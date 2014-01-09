@@ -32,14 +32,4 @@
 
 @implementation IRailConnection
 
-@synthesize departure, arrival, transfers, duration, delay;
-
--(void)dealloc {
-    [departure release];
-    [arrival release];
-    [transfers release];
-    
-    [super dealloc];
-}
-
 @end

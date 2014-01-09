@@ -31,19 +31,8 @@
 
 @implementation IRailAPIConnectionCommand
 
-- (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl {
-    self = [super initWithAPIDelegate:aDelegate andCommandURL:aUrl];
-    if (self) {
-        parser = [[IRailConnectionParser alloc] init];
-    }
-    
-    return self;
-}
-
-- (void)finishWithResult:(id)result {
-    if ([delegate respondsToSelector:@selector(iRailApiCommandDidFinishReceivingConnections:)]) {
-        [delegate iRailApiCommandDidFinishReceivingConnections:result];
-    }
++ (Class)parserClass {
+    return [IRailConnectionParser class];
 }
 
 @end

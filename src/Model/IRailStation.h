@@ -30,14 +30,10 @@
 #import <Foundation/Foundation.h>
 
 
-@interface IRailStation : NSObject {
-    NSString    *sid;
-    NSString    *name;
-    double      xCoord, yCoord;
-}
+@interface IRailStation : NSObject
 
-@property(nonatomic, retain) NSString *sid;
-@property(nonatomic, retain) NSString *name;
+@property(nonatomic, strong) NSString *sid;
+@property(nonatomic, strong) NSString *name;
 @property(nonatomic, assign) double xCoord;
 @property(nonatomic, assign) double yCoord;
 

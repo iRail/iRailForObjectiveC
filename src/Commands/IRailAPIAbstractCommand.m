@@ -31,65 +31,65 @@
 
 @implementation IRailAPIAbstractCommand
 
-- (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl {
+- (instancetype)initWithCommandURL:(NSURL *)url completion:(GeneralCompletion)completion {
     self = [super init];
     if (self) {
-        self->delegate = [aDelegate retain];
-        self->commandURL = [aUrl retain];
+        self.completion = completion;
+        self.commandURL = url;
     }
-    
     return self;
 }
 
 - (void)execute {
     
-    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:commandURL];
+    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:self.commandURL];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
     if (connection) {
-        apiResponseData = [[NSMutableData alloc] init];
+        self.apiResponseData = [[NSMutableData alloc] init];
     }
     
-    [request release];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [delegate iRailApiCommandDidFailWithError:error];
-    [self release];
+    [self callCompletionWithResult:nil error:error];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-    [apiResponseData appendData:data];
+    [self.apiResponseData appendData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     
-    id result = [[parser parseData:apiResponseData] retain];
+    IRailAbstractParser *parser = [[[[self class] parserClass] alloc] init];
     
-    if( !result ) {
-        //TODO: Proper NSError object...
-        [delegate iRailApiCommandDidFailWithError:nil];
-    } else {
-        [self finishWithResult:result];
+    if (![parser isKindOfClass:[IRailAbstractParser class]]) {
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                       reason:[NSString stringWithFormat:@"Provided parserClass \"%@\" must be a sublass of IRailAbstractParser", NSStringFromClass([parser class])]
+                                     userInfo:nil];
     }
 
-    [result release];
-    [apiResponseData release];
+    @autoreleasepool {
+        id result = [parser parseData:self.apiResponseData];
+        
+        if( !result ) {
+            self.completion(nil,[NSError errorWithDomain:@"iRail" code:1 userInfo:nil]);
+        } else {
+            [self callCompletionWithResult:result error:nil];
+        }
+    }
     
-    [pool release];
-    [self release];
 }
 
-- (void)finishWithResult:(id)result {
-    //ABSTRACT METHOD
-    //implement with correct delegate call...
++ (Class)parserClass {
+    @throw [NSException exceptionWithName:NSInternalInconsistencyException
+                                   reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
+                                 userInfo:nil];
 }
 
-- (void)dealloc {
-    [delegate release];
-    [parser release];
-    [commandURL release];
-    [super dealloc];
+- (void)callCompletionWithResult:(id) result error:(NSError *)error {
+    if (self.completion) {
+        self.completion(result,error);
+    }
 }
 
 @end

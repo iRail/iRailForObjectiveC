@@ -33,9 +33,9 @@
 #import "IRailLiveboard.h"
 #import "IRailArrivalDeparture.h"
 
-@interface IRailLiveboardParser : IRailAbstractParser {
-    NSMutableArray  *departureList;    
-    IRailLiveboard *liveboard;
-}
+@interface IRailLiveboardParser : IRailAbstractParser
+
+@property (nonatomic, strong) NSMutableArray *departureList;
+@property (nonatomic, strong) IRailLiveboard *liveboard;
 
 @end

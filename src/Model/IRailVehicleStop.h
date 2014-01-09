@@ -30,16 +30,12 @@
 #import <Foundation/Foundation.h>
 #import "IRailStation.h"
 
-@interface IRailVehicleStop : NSObject {
-    IRailStation *station;
-    NSDate *time;
-    int delay;
-}
+@interface IRailVehicleStop : NSObject
 
-@property(nonatomic, retain) IRailStation *station;
-@property(nonatomic, retain) NSDate *time;
+@property(nonatomic, strong) IRailStation *station;
+@property(nonatomic, strong) NSDate *time;
 @property(nonatomic, assign) int delay;
 
-- (id)initWithStation:(IRailStation *)aStation time:(NSDate *)aTime andDelay:(int)aDelay;
+- (instancetype)initWithStation:(IRailStation *)aStation time:(NSDate *)aTime andDelay:(int)aDelay;
 
 @end

@@ -32,25 +32,14 @@
 
 @implementation IRailVehicleStop
 
-@synthesize station, time, delay;
-
-- (id)initWithStation:(IRailStation *)aStation time:(NSDate *)aTime andDelay:(int)aDelay {
+- (instancetype)initWithStation:(IRailStation *)aStation time:(NSDate *)aTime andDelay:(int)aDelay {
     self = [super init];
     if (self) {
-        
-        [self setStation:aStation];
-        [self setTime:aTime];
-        [self setDelay:aDelay];
+        _station = aStation;
+        _time = aTime;
+        _delay = aDelay;
     }
-    
     return self;
-}
-
-- (void)dealloc {
-    [station release];
-    [time release];
-    
-    [super dealloc];
 }
 
 @end

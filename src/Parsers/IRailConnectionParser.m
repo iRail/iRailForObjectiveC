@@ -35,46 +35,39 @@
 - (id)init {
     self = [super init];
     if (self) {
-        connection = [[IRailConnection alloc] init];
-        connections = [[NSMutableArray alloc] init];
+        _connection = [[IRailConnection alloc] init];
+        _connections = [[NSMutableArray alloc] init];
     }
     
     return self;
 }
 
 - (id)finishedParsing {
-    return connections;
+    return self.connections;
 }
 
 - (void)foundElement:(IRailParserNode *)element {
     
     if ([element.name isEqualToString:@"connection"]) {
-        [connections addObject:connection];
+        [self.connections addObject:self.connection];
         
-        [connection release];
-        connection = [[IRailConnection alloc] init];
+        self.connection = [[IRailConnection alloc] init];
         
     } else if ([element.name isEqualToString:@"arrival"] && [element.parent.name isEqualToString:@"connection"]) {
-        connection.arrival = [IRailModelGenerator generateArrivalDepartureForNode:element];
+        self.connection.arrival = [IRailModelGenerator generateArrivalDepartureForNode:element];
     } else if ([element.name isEqualToString:@"departure"] && [element.parent.name isEqualToString:@"connection"]) {
-        connection.departure = [IRailModelGenerator generateArrivalDepartureForNode:element];
+        self.connection.departure = [IRailModelGenerator generateArrivalDepartureForNode:element];
     } else if ([element.name isEqualToString:@"duration"]) {
-        connection.duration = [element.content intValue];
+        self.connection.duration = [element.content intValue];
         if ([element.attributes objectForKey:@"delay"] != nil) {
-            connection.delay = YES;
+            self.connection.delay = YES;
         } else {
-            connection.delay = NO;
+            self.connection.delay = NO;
         }
         
     } else if ([element.name isEqualToString:@"vias"]) {
-        connection.transfers = [IRailModelGenerator generateTransfersForNode:element];
+        self.connection.transfers = [IRailModelGenerator generateTransfersForNode:element];
     }
-}
-
-- (void)dealloc {
-    [connection release];
-    [connections release];
-    [super dealloc];
 }
 
 @end

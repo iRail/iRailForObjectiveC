@@ -28,22 +28,21 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "IRailAPIDelegate.h"
 #import "IRailAbstractParser.h"
 
-@interface IRailAPIAbstractCommand : NSObject {
-    NSMutableData           *apiResponseData;
-    
-    NSURL                   *commandURL;
-    id<IRailAPIDelegate>    delegate;
-    IRailAbstractParser     *parser;
-}
 
-- (id)initWithAPIDelegate:(id<IRailAPIDelegate>)aDelegate andCommandURL:(NSURL *)aUrl;
+typedef void(^GeneralCompletion)(id result, NSError *error);
+@interface IRailAPIAbstractCommand : NSObject
+
+@property (nonatomic, strong) NSMutableData *apiResponseData;
+@property (nonatomic, strong) NSURL *commandURL;
+@property (nonatomic, copy) GeneralCompletion completion;
+
+- (instancetype)initWithCommandURL:(NSURL *)url completion:(GeneralCompletion)completion;
+
 - (void)execute;
 
-//private
-//abstract methods
-- (void)finishWithResult:(id)result;
+// Override this method for setting a parser class
++ (Class)parserClass;
 
 @end

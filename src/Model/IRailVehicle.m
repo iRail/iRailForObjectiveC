@@ -32,23 +32,14 @@
 
 @implementation IRailVehicle
 
-@synthesize vid, stops;
-
 - (id)initWithVehicleId:(NSString *)aVid andStopList:(NSArray *)aStopList {
+    
     self = [super init];
     if (self) {
-        [self setVid:aVid];
-        [self setStops:aStopList];
+        _vid = aVid;
+        _stops = aStopList;
     }
     
     return self;
 }
-
-- (void)dealloc {
-    [vid release];
-    [stops release];
-    
-    [super dealloc];
-}
-
 @end

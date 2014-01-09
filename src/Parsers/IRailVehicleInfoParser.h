@@ -33,8 +33,8 @@
 #import "IRailVehicle.h"
 #import "IRailVehicleStop.h"
 
-@interface IRailVehicleInfoParser : IRailAbstractParser {
-    IRailVehicle *vehicle;
-}
+@interface IRailVehicleInfoParser : IRailAbstractParser
+
+@property (nonatomic, strong) IRailVehicle *vehicle;
 
 @end

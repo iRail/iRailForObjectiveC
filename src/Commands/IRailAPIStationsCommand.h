@@ -30,9 +30,6 @@
 #import <Foundation/Foundation.h>
 #import "IRailAPIAbstractCommand.h"
 
-
-@interface IRailAPIStationsCommand : IRailAPIAbstractCommand {
-    
-}
+@interface IRailAPIStationsCommand : IRailAPIAbstractCommand
 
 @end
