@@ -36,6 +36,6 @@
 @property (nonatomic, strong) NSDate *time;
 @property (nonatomic, strong) NSString *platform;
 @property (nonatomic) NSInteger delay;
-
+@property (strong, nonatomic) NSString *direction;
 
 @end

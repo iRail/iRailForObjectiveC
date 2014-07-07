@@ -34,6 +34,8 @@
 
 @property (nonatomic, strong) NSString *vid;
 @property (nonatomic, strong) NSArray *stops;
+@property (nonatomic) double xCoord;
+@property (nonatomic) double yCoord;
 
 - (instancetype)initWithVehicleId:(NSString *)vid andStopList:(NSArray *)stopList;
 

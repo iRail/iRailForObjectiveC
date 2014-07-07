@@ -37,6 +37,7 @@
     
     IRailStation *station = [[IRailStation alloc] init];
     station.name = node.content;
+		station.sid = [node.attributes objectForKey:@"id"];
     station.xCoord = [[node.attributes objectForKey:@"locationX"] doubleValue];
     station.yCoord = [[node.attributes objectForKey:@"locationY"] doubleValue];
     
@@ -48,7 +49,9 @@
     
     IRailVehicle *vehicle = [[IRailVehicle alloc] init];
     vehicle.vid = node.content;
-    
+    vehicle.xCoord = [[node.attributes objectForKey:@"locationX"] doubleValue];
+    vehicle.yCoord = [[node.attributes objectForKey:@"locationY"] doubleValue];
+		
     return vehicle;
 }
 
@@ -98,7 +101,9 @@
             arrivalDeparture.time = date;
         } else if ( [curnode.name isEqualToString:@"platform"] ) {
             arrivalDeparture.platform = curnode.content;
-        }
+        } else if ([curnode.name isEqualToString:@"direction"]) {
+					arrivalDeparture.direction = curnode.content;
+				}
     }
     
     return arrivalDeparture;
