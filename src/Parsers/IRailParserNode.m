@@ -29,7 +29,6 @@
 
 #import "IRailParserNode.h"
 
-
 @implementation IRailParserNode
 
 - (instancetype)init {

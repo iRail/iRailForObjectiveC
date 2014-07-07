@@ -29,7 +29,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface URLBuilder : NSObject
 
 @property (nonatomic, strong) NSString *baseURL;

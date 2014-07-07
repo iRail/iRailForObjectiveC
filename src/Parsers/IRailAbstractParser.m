@@ -39,7 +39,8 @@
 
 @implementation IRailAbstractParser
 
-- (instancetype)init {
+- (instancetype)init
+{
     self = [super init];
     if (self) {
         self.error = NO;
@@ -48,8 +49,8 @@
     return self;
 }
 
-- (id)parseData:(NSData *)data {
-    
+- (id)parseData:(NSData *)data
+{    
     [self startedParsing];
     
     NSXMLParser *parser = [[NSXMLParser alloc] initWithData:data];
@@ -62,31 +63,29 @@
     return nil;
 }
 
-
-
-- (void)parserDidStartDocument:(NSXMLParser *)parser {
+- (void)parserDidStartDocument:(NSXMLParser *)parser
+{
     self.nodeStack = [[NSMutableArray alloc] init];
     [self startedParsing];
 }
 
-- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-    
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
+{    
     IRailParserNode *node = [[IRailParserNode alloc] init];
     node.name = elementName;
     node.attributes = attributeDict;
     
     if ([self.nodeStack count] > 0) {
         IRailParserNode *lastNode = [self.nodeStack lastObject];
-        
         [lastNode.children addObject:node];
         node.parent = lastNode;
     }
     
     [self.nodeStack addObject:node];
-    
 }
 
-- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string
+{
     if(!self.currentContent) {
         self.currentContent = [NSMutableString new];
     }
@@ -94,8 +93,8 @@
     [self.currentContent appendString:string];
 }
 
-- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
-
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName
+{
     IRailParserNode *node = [self.nodeStack lastObject];
     
     NSString *contentString = nil;
@@ -103,7 +102,6 @@
     if(self.currentContent)contentString = [[NSString alloc] initWithString:self.currentContent];
     node.content = contentString;
     
-
     self.currentContent = nil;
     
     if ([node.name isEqualToString:@"error"]) {
@@ -115,29 +113,35 @@
     [self.nodeStack removeLastObject];
 }
 
-- (void)parserDidEndDocument:(NSXMLParser *)parser {
+- (void)parserDidEndDocument:(NSXMLParser *)parser
+{
 }
 
-- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError {
+- (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
+{
     self.error = YES;
     [self errorOccured];
 }
 
 
-- (void)startedParsing {
+- (void)startedParsing
+{
     //ABSTRACT METHOD
 }
 
-- (void)errorOccured {
+- (void)errorOccured
+{
     //ABSTRACT METHOD
 }
 
-- (id)finishedParsing {
+- (id)finishedParsing
+{
     //ABSTRACT METHOD
     return nil;
 }
 
-- (void)foundElement:(IRailParserNode *)element {
+- (void)foundElement:(IRailParserNode *)element
+{
     //ABSTRACT METHOD
 }
 

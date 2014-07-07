@@ -44,8 +44,8 @@ typedef void(^ConnectionsCompletion)(NSArray *connections, NSError *error);
 + (void)callStationListWithCompletion:(StationListCompletion)completion;
 + (void)callInfoForVehicle:(NSString *)vehicleId withCompletion:(VehicleInfoCompletion)completion;
 + (void)callLiveboardCommandForStation:(NSString *)station withCompletion:(LiveBoardCompletion)completion;
-+ (void)callConnectionCommandWithDepartureName:(NSString *) fromName andArrivalName:(NSString *) toName completion:(ConnectionsCompletion)completion;
-+ (void)callConnectionCommandWithDepartureName:(NSString *) fromName arrivalName:(NSString *) toName date:(NSDate *)date andDateType:(IRailDateType) dateType completion:(ConnectionsCompletion)completion;
++ (void)callConnectionCommandWithDepartureName:(NSString *)fromName andArrivalName:(NSString *)toName completion:(ConnectionsCompletion)completion;
++ (void)callConnectionCommandWithDepartureName:(NSString *)fromName arrivalName:(NSString *)toName date:(NSDate *)date andDateType:(IRailDateType)dateType completion:(ConnectionsCompletion)completion;
 
 @end
 
@@ -56,7 +56,7 @@ typedef void(^ConnectionsCompletion)(NSArray *connections, NSError *error);
 
 + (IRailAPISettings *)sharedSettings;
 
-@property (strong, nonatomic) NSString* language; // default: @"en"
-@property (strong, nonatomic) NSString* baseUrl; // default: @"http://api.irail.be"
+@property (strong, nonatomic) NSString *language; // default: @"en"
+@property (strong, nonatomic) NSString *baseUrl; // default: @"http://api.irail.be"
 
 @end

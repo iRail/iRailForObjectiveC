@@ -35,14 +35,13 @@
     return self.vehicle;
 }
 
-- (void)foundElement:(IRailParserNode *)element {
-    
+- (void)foundElement:(IRailParserNode *)element
+{    
     if ([element.name isEqualToString:@"vehicle"]) {
         self.vehicle = [IRailModelGenerator generateVehicleForNode:element];
     } else if ([element.name isEqualToString:@"stops"]) {
         [IRailModelGenerator generateVehicleInformationForVehicle:self.vehicle withNode:element];
-    }
-    
+    }   
 }
 
 @end

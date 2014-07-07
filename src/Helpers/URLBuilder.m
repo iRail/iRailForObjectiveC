@@ -29,7 +29,6 @@
 
 #import "URLBuilder.h"
 
-
 @implementation URLBuilder
 
 - (instancetype)initWithBaseURL:(NSString *)url
@@ -50,7 +49,8 @@
     [self.path appendString:path];
 }
 
-- (void)appendField:(NSString *)field withValue:(NSString *)value {
+- (void)appendField:(NSString *)field withValue:(NSString *)value
+{
     if([self.query length] > 0) [self.query appendString:@"&"];
     
     [self.query appendString:field];
@@ -58,13 +58,14 @@
     [self.query appendString:value];
 }
 
-- (void)reset {
+- (void)reset
+{
     self.query = [[NSMutableString alloc] init];
     self.path = [[NSMutableString alloc] init];
 }
 
-- (NSURL *)getURL {
-    
+- (NSURL *)getURL
+{    
     NSMutableString *newURL = [[NSMutableString alloc] initWithString:self.baseURL];
     
     if([self.baseURL characterAtIndex:[self.baseURL length]-1] != '/') [newURL appendString:@"/"];

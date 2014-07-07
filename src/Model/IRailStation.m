@@ -29,7 +29,6 @@
 
 #import "IRailStation.h"
 
-
 @implementation IRailStation
 
 @end

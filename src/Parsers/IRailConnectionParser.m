@@ -32,27 +32,27 @@
 
 @implementation IRailConnectionParser
 
-- (id)init {
+- (instancetype)init
+{
     self = [super init];
     if (self) {
-        _connection = [[IRailConnection alloc] init];
-        _connections = [[NSMutableArray alloc] init];
+        self.connection = [[IRailConnection alloc] init];
+        self.connections = [[NSMutableArray alloc] init];
     }
     
     return self;
 }
 
-- (id)finishedParsing {
+- (id)finishedParsing
+{
     return self.connections;
 }
 
-- (void)foundElement:(IRailParserNode *)element {
-    
+- (void)foundElement:(IRailParserNode *)element
+{    
     if ([element.name isEqualToString:@"connection"]) {
         [self.connections addObject:self.connection];
-        
         self.connection = [[IRailConnection alloc] init];
-        
     } else if ([element.name isEqualToString:@"arrival"] && [element.parent.name isEqualToString:@"connection"]) {
         self.connection.arrival = [IRailModelGenerator generateArrivalDepartureForNode:element];
     } else if ([element.name isEqualToString:@"departure"] && [element.parent.name isEqualToString:@"connection"]) {
@@ -64,7 +64,6 @@
         } else {
             self.connection.delay = NO;
         }
-        
     } else if ([element.name isEqualToString:@"vias"]) {
         self.connection.transfers = [IRailModelGenerator generateTransfersForNode:element];
     }

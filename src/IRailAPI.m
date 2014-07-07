@@ -29,7 +29,6 @@
 
 #import "IRailAPI.h"
 #import "URLBuilder.h"
-
 #import "IRailAPIStationsCommand.h"
 #import "IRailAPIVehicleInfoCommand.h"
 #import "IRailAPILiveboardCommand.h"
@@ -37,7 +36,8 @@
 
 @implementation IRailAPI
 
-+ (NSURL *)generateUrlForPath:(NSString *)path andQueryParameters:(NSDictionary *)queryParameters {
++ (NSURL *)generateUrlForPath:(NSString *)path andQueryParameters:(NSDictionary *)queryParameters
+{
     URLBuilder *urlBuilder = [[URLBuilder alloc] initWithBaseURL:[[IRailAPISettings sharedSettings] baseUrl]];
     
     [urlBuilder appendPath:path];
@@ -53,36 +53,38 @@
     return [urlBuilder getURL];
 }
 
-+ (void)callStationListWithCompletion:(StationListCompletion)completion {
-    
++ (void)callStationListWithCompletion:(StationListCompletion)completion
+{    
     NSURL *url = [self generateUrlForPath:@"stations/" andQueryParameters:nil];
     IRailAPIAbstractCommand *command = [[IRailAPIStationsCommand alloc] initWithCommandURL:url completion:completion];
+		
     [command execute];
 }
 
-+ (void)callInfoForVehicle:(NSString *)vehicleId withCompletion:(VehicleInfoCompletion)completion {
++ (void)callInfoForVehicle:(NSString *)vehicleId withCompletion:(VehicleInfoCompletion)completion
+{
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:vehicleId forKey:@"id"];
     NSURL *url = [self generateUrlForPath:@"vehicle/" andQueryParameters:query];
     
     IRailAPIAbstractCommand *command = [[IRailAPIVehicleInfoCommand alloc] initWithCommandURL:url completion:completion];
-    [command execute];
-    
+
+    [command execute];   
 }
 
-+ (void)callLiveboardCommandForStation:(NSString *)station withCompletion:(LiveBoardCompletion)completion {
-
++ (void)callLiveboardCommandForStation:(NSString *)station withCompletion:(LiveBoardCompletion)completion
+{
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:station forKey:@"station"];
     NSURL *url = [self generateUrlForPath:@"liveboard/" andQueryParameters:query];
 
     IRailAPIAbstractCommand *command = [[IRailAPILiveboardCommand alloc] initWithCommandURL:url completion:completion];
-    [command execute];
 
+    [command execute];
 }
 
-+ (void)callConnectionCommandWithDepartureName:(NSString *)fromName arrivalName:(NSString *)toName date:(NSDate *)date andDateType:(IRailDateType)dateType completion:(ConnectionsCompletion)completion {
-    
++ (void)callConnectionCommandWithDepartureName:(NSString *)fromName arrivalName:(NSString *)toName date:(NSDate *)date andDateType:(IRailDateType)dateType completion:(ConnectionsCompletion)completion
+{    
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:fromName forKey:@"from"];
     [query setValue:toName forKey:@"to"];
@@ -94,7 +96,7 @@
     [dateFormatter setDateFormat:@"hhmm"];
     [query setValue:[dateFormatter stringFromDate:date] forKey:@"time"];
     
-    switch( dateType ) {
+    switch (dateType) {
         case DATE_ARRIVAL:
             [query setValue:@"arrive" forKey:@"timeSel"];
             break;
@@ -109,8 +111,8 @@
     [command execute];
 }
 
-+ (void)callConnectionCommandWithDepartureName:(NSString *)fromName andArrivalName:(NSString *)toName completion:(ConnectionsCompletion)completion {
-    
++ (void)callConnectionCommandWithDepartureName:(NSString *)fromName andArrivalName:(NSString *)toName completion:(ConnectionsCompletion)completion
+{    
     NSMutableDictionary *query = [[NSMutableDictionary alloc] init];
     [query setValue:fromName forKey:@"from"];
     [query setValue:toName forKey:@"to"];
@@ -136,6 +138,7 @@
         sharedSettings.language = @"en";
         sharedSettings.baseUrl = @"http://api.irail.be";
     });
+		
     return sharedSettings;
 }
 

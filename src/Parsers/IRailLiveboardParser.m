@@ -32,30 +32,29 @@
 
 @implementation IRailLiveboardParser
 
-- (id)init {
+- (instancetype)init
+{
     self = [super init];
     if (self) {
-        _departureList = [[NSMutableArray alloc] init];
-        _liveboard = [[IRailLiveboard alloc] init];
+        self.departureList = [[NSMutableArray alloc] init];
+        self.liveboard = [[IRailLiveboard alloc] init];
     }
     return self;
 }
 
-- (id)finishedParsing {
-    
+- (id)finishedParsing
+{    
     self.liveboard.departureList = [NSArray arrayWithArray:self.departureList];
     return self.liveboard;
-    
 }
 
-- (void)foundElement:(IRailParserNode *)element {
-    
+- (void)foundElement:(IRailParserNode *)element
+{    
     if ([element.name isEqualToString:@"station"]) {
         self.liveboard.station = [IRailModelGenerator generateStationForNode:element];
     } else if ([element.name isEqualToString:@"departure"]) {
         [self.departureList addObject: [IRailModelGenerator generateArrivalDepartureForNode:element] ];
-    }
-    
+    }   
 }
 
 @end

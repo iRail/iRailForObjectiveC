@@ -41,5 +41,4 @@
 @property (nonatomic, strong) IRailVehicle *vehicle;
 @property (nonatomic) NSInteger timeBetween;
 
-
 @end

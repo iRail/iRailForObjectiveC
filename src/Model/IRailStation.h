@@ -29,7 +29,6 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface IRailStation : NSObject
 
 @property (nonatomic, strong) NSString *sid;

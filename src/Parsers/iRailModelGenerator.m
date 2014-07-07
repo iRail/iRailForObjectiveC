@@ -32,8 +32,9 @@
 
 @implementation IRailModelGenerator
 
-+ (IRailStation *)generateStationForNode:(IRailParserNode *)node {
-    if ( ![node.name isEqualToString:@"station"] && ![node.name isEqualToString:@"direction"] ) return nil;
++ (IRailStation *)generateStationForNode:(IRailParserNode *)node
+{
+    if (![node.name isEqualToString:@"station"] && ![node.name isEqualToString:@"direction"]) return nil;
     
     IRailStation *station = [[IRailStation alloc] init];
     station.name = node.content;
@@ -44,8 +45,9 @@
     return station;
 }
 
-+ (IRailVehicle *)generateVehicleForNode:(IRailParserNode *)node {
-    if( ![node.name isEqualToString:@"vehicle"] ) return nil;
++ (IRailVehicle *)generateVehicleForNode:(IRailParserNode *)node
+{
+    if(![node.name isEqualToString:@"vehicle"]) return nil;
     
     IRailVehicle *vehicle = [[IRailVehicle alloc] init];
     vehicle.vid = node.content;
@@ -55,15 +57,13 @@
     return vehicle;
 }
 
-+ (IRailVehicle *)generateVehicleInformationForVehicle:(IRailVehicle *) vehicle withNode:(IRailParserNode *)node {
-    
-    if ( [node.name isEqualToString:@"stops"] ) {
-        
++ (IRailVehicle *)generateVehicleInformationForVehicle:(IRailVehicle *)vehicle withNode:(IRailParserNode *)node
+{    
+    if ([node.name isEqualToString:@"stops"]) {
         NSMutableArray *stops = [[NSMutableArray alloc] init];
         
         for (int i = 0; i < [node.children count]; i++) {
             IRailParserNode *curnode = [node.children objectAtIndex:i];
-            
             IRailVehicleStop *stop = [[IRailVehicleStop alloc] init];
             
             for(int j = 0; j < [curnode.children count]; j++) {
@@ -75,6 +75,7 @@
                     stop.time = date;
                 }
             }
+						
             [stops addObject:stop];
 
         }
@@ -85,38 +86,42 @@
     return vehicle;
 }
 
-+ (IRailArrivalDeparture *)generateArrivalDepartureForNode:(IRailParserNode *)node {
-    if ( ![node.name isEqualToString:@"departure"] && ![node.name isEqualToString:@"arrival"] ) return nil;
++ (IRailArrivalDeparture *)generateArrivalDepartureForNode:(IRailParserNode *)node
+{
+    if (![node.name isEqualToString:@"departure"] && ![node.name isEqualToString:@"arrival"]) return nil;
     
     IRailArrivalDeparture *arrivalDeparture = [[IRailArrivalDeparture alloc] init];
-    for (int i = 0; i < [node.children count]; i++) {
+    
+		for (int i = 0; i < [node.children count]; i++) {
         IRailParserNode *curnode = [node.children objectAtIndex:i];
         
-        if ( [curnode.name isEqualToString:@"station"] ) {
+        if ([curnode.name isEqualToString:@"station"]) {
             arrivalDeparture.station = [IRailModelGenerator generateStationForNode:curnode];
-        } else if ( [curnode.name isEqualToString:@"vehicle"] ) {
+        } else if ([curnode.name isEqualToString:@"vehicle"]) {
             arrivalDeparture.vehicleId = curnode.content;
-        } else if ( [curnode.name isEqualToString:@"time"] ) {
-            NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970: [curnode.content longLongValue]];
+        } else if ([curnode.name isEqualToString:@"time"]) {
+            NSDate *date = [[NSDate alloc] initWithTimeIntervalSince1970:[curnode.content longLongValue]];
             arrivalDeparture.time = date;
-        } else if ( [curnode.name isEqualToString:@"platform"] ) {
+        } else if ([curnode.name isEqualToString:@"platform"]) {
             arrivalDeparture.platform = curnode.content;
         } else if ([curnode.name isEqualToString:@"direction"]) {
-					arrivalDeparture.direction = curnode.content;
+						arrivalDeparture.direction = curnode.content;
 				}
     }
     
     return arrivalDeparture;
 }
 
-+ (NSArray *)generateTransfersForNode:(IRailParserNode *)node {
-    if ( ![node.name isEqualToString:@"vias"] ) return nil;
++ (NSArray *)generateTransfersForNode:(IRailParserNode *)node
+{
+    if ( ![node.name isEqualToString:@"vias"]) return nil;
     
     NSMutableArray *array = [[NSMutableArray alloc] init];
-    for (int i = 0; i < [node.children count]; i++) {
+    
+		for (int i = 0; i < [node.children count]; i++) {
         IRailParserNode *curnode = [node.children objectAtIndex:i];
-        
         IRailTransfer *transfer = [[IRailTransfer alloc] init];
+				
         for (int j = 0; j < [curnode.children count]; j++) {
             IRailParserNode *curnode2 = [curnode.children objectAtIndex:j];
             

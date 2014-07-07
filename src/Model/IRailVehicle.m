@@ -29,7 +29,6 @@
 
 #import "IRailVehicle.h"
 
-
 @implementation IRailVehicle
 
 - (instancetype)initWithVehicleId:(NSString *)vid andStopList:(NSArray *)stopList

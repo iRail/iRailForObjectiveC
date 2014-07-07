@@ -28,7 +28,6 @@
  */
 
 #import <Foundation/Foundation.h>
-
 #import "IRailArrivalDeparture.h"
 
 typedef enum DATE_TYPE {
