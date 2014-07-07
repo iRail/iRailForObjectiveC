@@ -32,12 +32,13 @@
 
 @implementation IRailVehicleStop
 
-- (instancetype)initWithStation:(IRailStation *)aStation time:(NSDate *)aTime andDelay:(int)aDelay {
+- (instancetype)initWithStation:(IRailStation *)station time:(NSDate *)time andDelay:(NSInteger)delay
+{
     self = [super init];
     if (self) {
-        _station = aStation;
-        _time = aTime;
-        _delay = aDelay;
+        self.station = station;
+        self.time = time;
+        self.delay = delay;
     }
     return self;
 }

@@ -26,6 +26,7 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of iRail vzw/asbl.
  */
+
 #import "IRailAPIConnectionCommand.h"
 #import "IRailConnectionParser.h"
 

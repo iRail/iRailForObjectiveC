@@ -86,7 +86,7 @@
                                  userInfo:nil];
 }
 
-- (void)callCompletionWithResult:(id) result error:(NSError *)error {
+- (void)callCompletionWithResult:(id)result error:(NSError *)error {
     if (self.completion) {
         self.completion(result,error);
     }

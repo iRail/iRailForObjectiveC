@@ -32,9 +32,9 @@
 
 @interface IRailStation : NSObject
 
-@property(nonatomic, strong) NSString *sid;
-@property(nonatomic, strong) NSString *name;
-@property(nonatomic, assign) double xCoord;
-@property(nonatomic, assign) double yCoord;
+@property (nonatomic, strong) NSString *sid;
+@property (nonatomic, strong) NSString *name;
+@property (nonatomic) double xCoord;
+@property (nonatomic) double yCoord;
 
 @end

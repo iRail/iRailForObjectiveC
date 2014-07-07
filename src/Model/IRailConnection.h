@@ -38,10 +38,10 @@ typedef enum DATE_TYPE {
 
 @interface IRailConnection : NSObject
 
-@property(nonatomic, strong) IRailArrivalDeparture *departure;
-@property(nonatomic, strong) IRailArrivalDeparture *arrival;
-@property(nonatomic, strong) NSArray *transfers;
-@property(nonatomic, assign) int duration;
-@property(nonatomic, assign) bool delay;
+@property (nonatomic, strong) IRailArrivalDeparture *departure;
+@property (nonatomic, strong) IRailArrivalDeparture *arrival;
+@property (nonatomic, strong) NSArray *transfers;
+@property (nonatomic) NSInteger duration;
+@property (nonatomic) bool delay;
 
 @end

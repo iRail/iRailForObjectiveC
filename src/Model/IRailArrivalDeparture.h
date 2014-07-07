@@ -31,11 +31,11 @@
 
 @interface IRailArrivalDeparture : NSObject
 
-@property(nonatomic, strong) IRailStation *station;
-@property(nonatomic, strong) NSString *vehicleId;
-@property(nonatomic, strong) NSDate *time;
-@property(nonatomic, strong) NSString *platform;
-@property(nonatomic, assign) int delay;
+@property (nonatomic, strong) IRailStation *station;
+@property (nonatomic, strong) NSString *vehicleId;
+@property (nonatomic, strong) NSDate *time;
+@property (nonatomic, strong) NSString *platform;
+@property (nonatomic) NSInteger delay;
 
 
 @end

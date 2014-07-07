@@ -29,12 +29,11 @@
 
 #import <Foundation/Foundation.h>
 #import "IRailAbstractParser.h"
-
 #import "IRailConnection.h"
 
 @interface IRailConnectionParser : IRailAbstractParser
 
-@property (nonatomic, strong) IRailConnection *connection;
-@property (nonatomic, strong) NSMutableArray *connections;
+@property (strong, nonatomic) IRailConnection *connection;
+@property (strong, nonatomic) NSMutableArray *connections;
 
 @end

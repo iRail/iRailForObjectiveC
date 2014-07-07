@@ -32,10 +32,10 @@
 
 @implementation IRailStationListParser
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
-        _stationList = [[NSMutableArray alloc] init];
+        self.stationList = [[NSMutableArray alloc] init];
     }
     return self;
 }

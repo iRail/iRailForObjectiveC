@@ -33,16 +33,16 @@
 
 @property (nonatomic, strong) NSMutableArray *nodeStack;
 @property (nonatomic, strong) NSMutableString *currentContent;
-@property (nonatomic, assign) BOOL error;
+@property (nonatomic) BOOL error;
 
 @end
 
 @implementation IRailAbstractParser
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
-        _error = NO;
+        self.error = NO;
     }
     
     return self;

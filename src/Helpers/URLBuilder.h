@@ -36,7 +36,7 @@
 @property (nonatomic, strong) NSMutableString *path;
 @property (nonatomic, strong) NSMutableString *query;
 
-- (id)initWithBaseURL:(NSString *)aUrl;
+- (instancetype)initWithBaseURL:(NSString *)url
 - (void)appendPath:(NSString *)path;
 - (void)appendField:(NSString *)parameters withValue:(NSString *)value;
 - (void)reset;

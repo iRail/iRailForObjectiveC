@@ -32,20 +32,22 @@
 
 @implementation URLBuilder
 
-- (id)initWithBaseURL:(NSString *)aUrl {
+- (instancetype)initWithBaseURL:(NSString *)url
+{
     self = [super init];
     if (self) {
-        _baseURL = aUrl;
-        _path = [[NSMutableString alloc] init];
-        _query = [[NSMutableString alloc] init];
+        self.baseURL = url;
+        self.path = [[NSMutableString alloc] init];
+        self.query = [[NSMutableString alloc] init];
     }
     
     return self;
 }
 
-- (void)appendPath:(NSString *)aPath {
+- (void)appendPath:(NSString *)path
+{
     if([self.path length] > 0 && [self.path characterAtIndex:[self.path length]-1] != '/') [self.path appendString:@"/"];
-    [self.path appendString:aPath];
+    [self.path appendString:path];
 }
 
 - (void)appendField:(NSString *)field withValue:(NSString *)value {

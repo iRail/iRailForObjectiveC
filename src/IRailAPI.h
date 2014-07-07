@@ -56,7 +56,7 @@ typedef void(^ConnectionsCompletion)(NSArray *connections, NSError *error);
 
 + (IRailAPISettings *)sharedSettings;
 
-@property(nonatomic, strong) NSString* language; // default: @"en"
-@property(nonatomic, strong) NSString* baseUrl; // default: @"http://api.irail.be"
+@property (strong, nonatomic) NSString* language; // default: @"en"
+@property (strong, nonatomic) NSString* baseUrl; // default: @"http://api.irail.be"
 
 @end

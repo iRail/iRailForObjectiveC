@@ -28,9 +28,7 @@
  */
 
 #import <Foundation/Foundation.h>
-
 #import "IRailParserNode.h"
-
 #import "IRailStation.h"
 #import "IRailVehicle.h"
 #import "IRailVehicleStop.h"

@@ -32,10 +32,10 @@
 
 @interface IRailVehicleStop : NSObject
 
-@property(nonatomic, strong) IRailStation *station;
-@property(nonatomic, strong) NSDate *time;
-@property(nonatomic, assign) int delay;
+@property (nonatomic, strong) IRailStation *station;
+@property (nonatomic, strong) NSDate *time;
+@property (nonatomic) NSInteger delay;
 
-- (instancetype)initWithStation:(IRailStation *)aStation time:(NSDate *)aTime andDelay:(int)aDelay;
+- (instancetype)initWithStation:(IRailStation *)station time:(NSDate *)time andDelay:(NSInteger)delay;
 
 @end

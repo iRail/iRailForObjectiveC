@@ -30,7 +30,6 @@
 #import <Foundation/Foundation.h>
 #import "IRailAbstractParser.h"
 
-
 typedef void(^GeneralCompletion)(id result, NSError *error);
 @interface IRailAPIAbstractCommand : NSObject
 
