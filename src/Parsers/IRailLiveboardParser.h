@@ -29,13 +29,12 @@
 
 #import <Foundation/Foundation.h>
 #import "IRailAbstractParser.h"
-
 #import "IRailLiveboard.h"
 #import "IRailArrivalDeparture.h"
 
 @interface IRailLiveboardParser : IRailAbstractParser
 
-@property (nonatomic, strong) NSMutableArray *departureList;
-@property (nonatomic, strong) IRailLiveboard *liveboard;
+@property (strong, nonatomic) NSMutableArray *departureList;
+@property (strong, nonatomic) IRailLiveboard *liveboard;
 
 @end

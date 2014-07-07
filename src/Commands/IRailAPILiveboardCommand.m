@@ -32,7 +32,7 @@
 
 @implementation IRailAPILiveboardCommand
 
-- (Class)parserClass {
++ (Class)parserClass {
     return [IRailLiveboardParser class];
 }
 

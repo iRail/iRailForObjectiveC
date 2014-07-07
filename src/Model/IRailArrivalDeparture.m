@@ -29,7 +29,6 @@
 
 #import "IRailArrivalDeparture.h"
 
-
 @implementation IRailArrivalDeparture
 
 @end

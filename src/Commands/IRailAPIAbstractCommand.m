@@ -31,7 +31,8 @@
 
 @implementation IRailAPIAbstractCommand
 
-- (instancetype)initWithCommandURL:(NSURL *)url completion:(GeneralCompletion)completion {
+- (instancetype)initWithCommandURL:(NSURL *)url completion:(GeneralCompletion)completion
+{
     self = [super init];
     if (self) {
         self.completion = completion;
@@ -40,26 +41,27 @@
     return self;
 }
 
-- (void)execute {
-    
+- (void)execute
+{    
     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:self.commandURL];
     NSURLConnection *connection = [NSURLConnection connectionWithRequest:request delegate:self];
     if (connection) {
         self.apiResponseData = [[NSMutableData alloc] init];
     }
-    
 }
 
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error
+{
     [self callCompletionWithResult:nil error:error];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
     [self.apiResponseData appendData:data];
 }
 
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{    
     IRailAbstractParser *parser = [[[[self class] parserClass] alloc] init];
     
     if (![parser isKindOfClass:[IRailAbstractParser class]]) {
@@ -77,16 +79,17 @@
             [self callCompletionWithResult:result error:nil];
         }
     }
-    
 }
 
-+ (Class)parserClass {
++ (Class)parserClass
+{
     @throw [NSException exceptionWithName:NSInternalInconsistencyException
                                    reason:[NSString stringWithFormat:@"You must override %@ in a subclass", NSStringFromSelector(_cmd)]
                                  userInfo:nil];
 }
 
-- (void)callCompletionWithResult:(id) result error:(NSError *)error {
+- (void)callCompletionWithResult:(id)result error:(NSError *)error
+{
     if (self.completion) {
         self.completion(result,error);
     }

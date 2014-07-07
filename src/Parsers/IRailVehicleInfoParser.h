@@ -29,7 +29,6 @@
 
 #import <Foundation/Foundation.h>
 #import "IRailAbstractParser.h"
-
 #import "IRailVehicle.h"
 #import "IRailVehicleStop.h"
 

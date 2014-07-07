@@ -29,26 +29,28 @@
 
 #import "URLBuilder.h"
 
-
 @implementation URLBuilder
 
-- (id)initWithBaseURL:(NSString *)aUrl {
+- (instancetype)initWithBaseURL:(NSString *)url
+{
     self = [super init];
     if (self) {
-        _baseURL = aUrl;
-        _path = [[NSMutableString alloc] init];
-        _query = [[NSMutableString alloc] init];
+        self.baseURL = url;
+        self.path = [[NSMutableString alloc] init];
+        self.query = [[NSMutableString alloc] init];
     }
     
     return self;
 }
 
-- (void)appendPath:(NSString *)aPath {
+- (void)appendPath:(NSString *)path
+{
     if([self.path length] > 0 && [self.path characterAtIndex:[self.path length]-1] != '/') [self.path appendString:@"/"];
-    [self.path appendString:aPath];
+    [self.path appendString:path];
 }
 
-- (void)appendField:(NSString *)field withValue:(NSString *)value {
+- (void)appendField:(NSString *)field withValue:(NSString *)value
+{
     if([self.query length] > 0) [self.query appendString:@"&"];
     
     [self.query appendString:field];
@@ -56,13 +58,14 @@
     [self.query appendString:value];
 }
 
-- (void)reset {
+- (void)reset
+{
     self.query = [[NSMutableString alloc] init];
     self.path = [[NSMutableString alloc] init];
 }
 
-- (NSURL *)getURL {
-    
+- (NSURL *)getURL
+{    
     NSMutableString *newURL = [[NSMutableString alloc] initWithString:self.baseURL];
     
     if([self.baseURL characterAtIndex:[self.baseURL length]-1] != '/') [newURL appendString:@"/"];

@@ -33,7 +33,7 @@
 
 @interface IRailLiveboard : NSObject
 
-@property(nonatomic, strong) IRailStation *station;
-@property(nonatomic, strong) NSArray *departureList;
+@property (nonatomic, strong) IRailStation *station;
+@property (nonatomic, strong) NSArray *departureList;
 
 @end

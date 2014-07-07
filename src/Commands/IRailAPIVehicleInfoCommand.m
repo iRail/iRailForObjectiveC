@@ -30,7 +30,6 @@
 #import "IRailAPIVehicleInfoCommand.h"
 #import "IRailVehicleInfoParser.h"
 
-
 @implementation IRailAPIVehicleInfoCommand
 
 + (Class)parserClass {

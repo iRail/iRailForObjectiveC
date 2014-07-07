@@ -32,21 +32,24 @@
 
 @implementation IRailStationListParser
 
-- (id)init {
+- (instancetype)init
+{
     self = [super init];
     if (self) {
-        _stationList = [[NSMutableArray alloc] init];
+        self.stationList = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
-- (id)finishedParsing {
+- (id)finishedParsing
+{
     return [NSArray arrayWithArray:self.stationList];
 }
 
-- (void)foundElement:(IRailParserNode *)element {
+- (void)foundElement:(IRailParserNode *)element
+{
     if ([element.name isEqualToString:@"station"]) {
-        [self.stationList addObject: [IRailModelGenerator generateStationForNode:element]];
+        [self.stationList addObject:[IRailModelGenerator generateStationForNode:element]];
     }
 }
 

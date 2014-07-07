@@ -29,15 +29,14 @@
 
 #import "IRailParserNode.h"
 
-
 @implementation IRailParserNode
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
-        _parent = nil;
-        _content = nil;
-        _children = [[NSMutableArray alloc] init];
+        self.parent = nil;
+        self.content = nil;
+        self.children = [[NSMutableArray alloc] init];
     }
     
     return self;

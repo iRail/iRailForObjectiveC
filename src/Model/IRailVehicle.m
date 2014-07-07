@@ -29,15 +29,14 @@
 
 #import "IRailVehicle.h"
 
-
 @implementation IRailVehicle
 
-- (id)initWithVehicleId:(NSString *)aVid andStopList:(NSArray *)aStopList {
-    
+- (instancetype)initWithVehicleId:(NSString *)vid andStopList:(NSArray *)stopList
+{    
     self = [super init];
     if (self) {
-        _vid = aVid;
-        _stops = aStopList;
+        self.vid = vid;
+        self.stops = stopList;
     }
     
     return self;

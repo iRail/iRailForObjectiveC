@@ -31,10 +31,9 @@
 #import "IRailParserNode.h"
 #import "IRailModelGenerator.h"
 
-
 @interface IRailAbstractParser : NSObject<NSXMLParserDelegate>
 
-- (id)parseData:(NSData *)data;
+- (instancetype)parseData:(NSData *)data;
 
 //protected
 //abstract methods

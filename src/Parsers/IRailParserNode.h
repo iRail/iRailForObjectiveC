@@ -29,13 +29,12 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface IRailParserNode : NSObject 
 
-@property(nonatomic, retain) NSString *name;
-@property(nonatomic, retain) NSString *content;
-@property(nonatomic, retain) NSDictionary *attributes;
-@property(nonatomic, retain) NSMutableArray *children;
-@property(nonatomic, assign) IRailParserNode *parent;
+@property (strong, nonatomic) NSString *name;
+@property (strong, nonatomic) NSString *content;
+@property (strong, nonatomic) NSDictionary *attributes;
+@property (strong, nonatomic) NSMutableArray *children;
+@property (weak, nonatomic) IRailParserNode *parent;
 
 @end

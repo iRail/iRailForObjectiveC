@@ -34,12 +34,11 @@
 
 @interface IRailTransfer : NSObject
 
-@property(nonatomic, strong) IRailArrivalDeparture *departure;
-@property(nonatomic, strong) IRailArrivalDeparture *arrival;
-@property(nonatomic, strong) IRailStation *station;
-@property(nonatomic, strong) IRailStation *trainDirection;
-@property(nonatomic, strong) IRailVehicle *vehicle;
-@property(nonatomic, assign) int timeBetween;
-
+@property (nonatomic, strong) IRailArrivalDeparture *departure;
+@property (nonatomic, strong) IRailArrivalDeparture *arrival;
+@property (nonatomic, strong) IRailStation *station;
+@property (nonatomic, strong) IRailStation *trainDirection;
+@property (nonatomic, strong) IRailVehicle *vehicle;
+@property (nonatomic) NSInteger timeBetween;
 
 @end

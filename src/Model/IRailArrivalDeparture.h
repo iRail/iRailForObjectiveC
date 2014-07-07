@@ -26,16 +26,17 @@
  * authors and should not be interpreted as representing official policies, either expressed
  * or implied, of iRail vzw/asbl.
  */
+
 #import <Foundation/Foundation.h>
 #import "IRailStation.h"
 
 @interface IRailArrivalDeparture : NSObject
 
-@property(nonatomic, strong) IRailStation *station;
-@property(nonatomic, strong) NSString *vehicleId;
-@property(nonatomic, strong) NSDate *time;
-@property(nonatomic, strong) NSString *platform;
-@property(nonatomic, assign) int delay;
-
+@property (nonatomic, strong) IRailStation *station;
+@property (nonatomic, strong) NSString *vehicleId;
+@property (nonatomic, strong) NSDate *time;
+@property (nonatomic, strong) NSString *platform;
+@property (nonatomic) NSInteger delay;
+@property (strong, nonatomic) NSString *direction;
 
 @end
