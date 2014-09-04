@@ -93,7 +93,7 @@
     [dateFormatter setDateFormat:@"ddMMyy"];
     [query setValue:[dateFormatter stringFromDate:date] forKey:@"date"];
     
-    [dateFormatter setDateFormat:@"hhmm"];
+    [dateFormatter setDateFormat:@"HHmm"];
     [query setValue:[dateFormatter stringFromDate:date] forKey:@"time"];
     
     switch (dateType) {
