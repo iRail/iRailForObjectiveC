@@ -65,7 +65,8 @@
         for (int i = 0; i < [node.children count]; i++) {
             IRailParserNode *curnode = [node.children objectAtIndex:i];
             IRailVehicleStop *stop = [[IRailVehicleStop alloc] init];
-            
+			stop.delay = [[curnode.attributes objectForKey:@"delay"] integerValue];
+			
             for(int j = 0; j < [curnode.children count]; j++) {
                 IRailParserNode *curnode2 = [curnode.children objectAtIndex:j];
                 if ([curnode2.name isEqualToString:@"station"]) {
@@ -91,8 +92,9 @@
     if (![node.name isEqualToString:@"departure"] && ![node.name isEqualToString:@"arrival"]) return nil;
     
     IRailArrivalDeparture *arrivalDeparture = [[IRailArrivalDeparture alloc] init];
+	arrivalDeparture.delay = [[node.attributes objectForKey:@"delay"] integerValue];
     
-		for (int i = 0; i < [node.children count]; i++) {
+	for (int i = 0; i < [node.children count]; i++) {
         IRailParserNode *curnode = [node.children objectAtIndex:i];
         
         if ([curnode.name isEqualToString:@"station"]) {
